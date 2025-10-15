@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Financial Movements - Financial Data Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+        <i class="fas fa-list me-3"></i>
+        Financial Movements
+    </h1>
+</div>
+
+<!-- Search and Filters -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Search & Filters
+        </h6>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Busca</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ search }}" 
+                       placeholder="Buscar por ID, número, cliente/fornecedor, observação...">
+            </div>
+            <div class="col-md-2">
+                <label for="start_date" class="form-label">Período inicial</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+            </div>
+            <div class="col-md-2">
+                <label for="end_date" class="form-label">Período final</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+            </div>
+            <div class="col-md-3">
+                <label for="company" class="form-label">Company</label>
+                <select class="form-select" id="company" name="company">
+                    <option value="">All Companies</option>
+                    {% for company in companies %}
+                    <option value="{{ company }}" {% if company_filter == company %}selected{% endif %}>
+                        {{ company }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="branch" class="form-label">Branch</label>
+                <select class="form-select" id="branch" name="branch">
+                    <option value="">All Branches</option>
+                    {% for branch in branches %}
+                    <option value="{{ branch }}" {% if branch_filter == branch %}selected{% endif %}>
+                        {{ branch }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    {% for status in statuses %}
+                    <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>
+                        {% if status == 'F' %}Finalized
+                        {% elif status == 'N' %}New
+                        {% elif status == 'P' %}Processing
+                        {% else %}{{ status }}
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+                <div class="btn-group w-100" role="group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Apply Filters
+                    </button>
+                    <a href="{{ url_for('main.movements') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-2"></i>Clear All
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-chart-line me-2"></i>
+            Movement Records
+            {% if movements.total %}
+            <span class="badge bg-secondary ms-2">{{ "{:,}".format(movements.total) }} total</span>
+            {% endif %}
+        </h5>
+        {% if movements.total > 0 %}
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-secondary" onclick="exportData()">
+                <i class="fas fa-download me-1"></i>Export
+            </button>
+            <a href="{{ url_for('main.delete_all_movements') }}" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-1"></i>Delete All
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-body p-0">
+        {% if movements.items %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="movementsTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>N° da NF</th>
+                        <th>Empresa</th>
+                        <th>Filial</th>
+                        <th>Cliente/Fornecedor</th>
+                        <th>Valor total da nota</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                        <th>ID interno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movement in movements.items %}
+                    <tr>
+                        <td>{{ movement.number or '-' }}</td>
+                        <td>
+                            {% if movement.empresa_code and movement.empresa_nome %}
+                                {{ movement.empresa_code }} - {{ movement.empresa_nome }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if movement.filial_nome and movement.filial_cnpj %}
+                                {{ movement.filial_nome }}<br>
+                                <small class="text-muted">{{ movement.filial_cnpj }}</small>
+                            {% elif movement.filial_nome %}
+                                {{ movement.filial_nome }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if movement.customer_vendor_name and movement.customer_vendor_cnpj %}
+                                {{ movement.customer_vendor_name }}<br>
+                                <small class="text-muted">CNPJ: {{ movement.customer_vendor_cnpj }}</small>
+                            {% elif movement.aux_customer_vendor_code %}
+                                <strong>{{ movement.aux_customer_vendor_code }}</strong>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if movement.gross_value is not none %}
+                                <span class="badge bg-success">
+                                    {{ movement.net_value_currency_code or 'R$' }} {{ "%.2f"|format(movement.gross_value) }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if movement.date %}
+                                <small class="text-muted">
+                                    {{ movement.date.strftime('%d/%m/%Y') }}
+                                </small>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if movement.status %}
+                                <span class="badge {% if movement.status == 'F' %}bg-success{% elif movement.status == 'N' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                    {{ movement.status }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ url_for('main.movement_detail', id=movement.id) }}" 
+                                   class="btn btn-outline-primary" title="Ver detalhes">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" 
+                                        onclick="confirmDelete({{ movement.id }}, '{{ movement.internal_id or movement.id }}')"
+                                        title="Excluir movimento">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <code class="text-primary">{{ movement.internal_id or '-' }}</code>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if movements.pages > 1 %}
+        <div class="card-footer">
+            <nav aria-label="Movements pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if movements.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.movements', page=movements.prev_num, search=search) }}">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in movements.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != movements.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.movements', page=page_num, search=search) }}">{{ page_num }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_num }}</span>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if movements.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.movements', page=movements.next_num, search=search) }}">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            
+            <!-- Pagination Info -->
+            <div class="text-center mt-2">
+                <small class="text-muted">
+                    Showing {{ movements.per_page * (movements.page - 1) + 1 }} to 
+                    {{ movements.per_page * movements.page if movements.page < movements.pages else movements.total }} 
+                    of {{ "{:,}".format(movements.total) }} entries
+                </small>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-5">
+            {% if search %}
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No results found</h5>
+            <p class="text-muted">No movements match your search criteria: "{{ search }}"</p>
+            <a href="{{ url_for('main.movements') }}" class="btn btn-outline-primary">
+                <i class="fas fa-times me-2"></i>Clear Search
+            </a>
+            {% else %}
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No movements found</h5>
+            <p class="text-muted">No financial movement records have been uploaded yet.</p>
+            {% if current_user.is_admin %}
+            <a href="{{ url_for('admin.upload_file') }}" class="btn btn-primary">
+                <i class="fas fa-upload me-2"></i>Upload Data
+            </a>
+            {% endif %}
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Quick Stats -->
+{% if movements.items %}
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-primary">Total Value</h5>
+                <p class="card-text">
+                    <span class="h4">
+                        {% set total_value = movements.items | map(attribute='net_value') | select('number') | sum %}
+                        R$ {{ "%.2f"|format(total_value or 0) }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-success">Completed</h5>
+                <p class="card-text">
+                    <span class="h4">
+                        {% set completed = movements.items | selectattr('status', 'equalto', 'F') | list | length %}
+                        {{ completed }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-warning">Pending</h5>
+                <p class="card-text">
+                    <span class="h4">
+                        {% set pending = movements.items | selectattr('status', 'equalto', 'N') | list | length %}
+                        {{ pending }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete movement <strong id="movementName"></strong>?</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Focus search input if there's no search term
+    if (!$('#search').val()) {
+        $('#search').focus();
+    }
+    
+    // Enable advanced search with Enter key
+    $('#search').keypress(function(e) {
+        if (e.which == 13) {
+            $(this).closest('form').submit();
+        }
+    });
+});
+
+function confirmDelete(movementId, movementName) {
+    document.getElementById('movementName').textContent = movementName;
+    document.getElementById('deleteForm').action = `/movements/${movementId}/delete`;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+function exportData() {
+    // Simple CSV export functionality
+    let table = document.getElementById('movementsTable');
+    let csv = [];
+    let rows = table.querySelectorAll('tr');
+    
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll('td, th');
+        
+        for (let j = 0; j < cols.length - 1; j++) { // Exclude actions column
+            row.push(cols[j].innerText);
+        }
+        
+        csv.push(row.join(','));
+    }
+    
+    // Download CSV
+    let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+    let downloadLink = document.createElement('a');
+    downloadLink.download = 'financial_movements.csv';
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+</script>
+{% endblock %}

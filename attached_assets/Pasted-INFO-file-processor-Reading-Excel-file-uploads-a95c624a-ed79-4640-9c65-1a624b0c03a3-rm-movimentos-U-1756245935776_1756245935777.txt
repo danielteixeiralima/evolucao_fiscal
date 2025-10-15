@@ -1,0 +1,29 @@
+INFO:file_processor:Reading Excel file: uploads/a95c624a-ed79-4640-9c65-1a624b0c03a3_rm_movimentos_ULTIMO_DIA_empresas_4_148.xlsx
+INFO:file_processor:Read Excel file with 210 rows
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+WARNING:file_processor:Both JSON and literal_eval failed for value: [{'companyId': 1, 'movementId': 169, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 843, 'qu... Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+INFO:file_processor:Saved 210 records to database with batch_id c93a7db9-d33f-4f26-950e-b7d3f34934d2
+[2025-08-26 22:05:10 +0000] [142] [INFO] Handling signal: winch
+[2025-08-26 22:05:10 +0000] [142] [INFO] Handling signal: winch
+[2025-08-26 22:05:10 +0000] [142] [INFO] Handling signal: winch
+[2025-08-26 22:05:10 +0000] [142] [INFO] Handling signal: winch
+[2025-08-26 22:05:11 +0000] [142] [INFO] Handling signal: winch
