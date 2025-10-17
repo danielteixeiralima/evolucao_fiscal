@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Financial Data Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Sign In
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control", placeholder="Enter your username") }}
+                        {% if form.username.errors %}
+                        <div class="text-danger mt-1">
+                            {% for error in form.username.errors %}
+                            <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control", placeholder="Enter your password") }}
+                        {% if form.password.errors %}
+                        <div class="text-danger mt-1">
+                            {% for error in form.password.errors %}
+                            <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Contact your administrator for account access
+                </small>
+            </div>
+        </div>
+        
+        <!-- Demo Credentials Info -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="fas fa-key me-2"></i>
+                    Default Admin Access
+                </h6>
+                <p class="card-text">
+                    <strong>Username:</strong> <code>admin</code><br>
+                    <strong>Password:</strong> <code>admin123</code>
+                </p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Important:</strong> Change the default password after first login.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Info -->
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Financial Data Management System
+                </h5>
+                <p class="card-text">
+                    Comprehensive platform for managing and analyzing financial movement data.
+                    Upload Excel files, manage users, and explore detailed financial records.
+                </p>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <i class="fas fa-upload fa-2x text-primary mb-2"></i>
+                        <p><strong>Bulk Upload</strong><br>Excel file processing</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-search fa-2x text-success mb-2"></i>
+                        <p><strong>Advanced Search</strong><br>Filter and find records</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-chart-bar fa-2x text-info mb-2"></i>
+                        <p><strong>Detailed Analysis</strong><br>JSON data visualization</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Focus username field on page load
+    $('#username').focus();
+    
+    // Form validation feedback
+    $('form').on('submit', function(e) {
+        const username = $('#username').val().trim();
+        const password = $('#password').val();
+        
+        if (!username || !password) {
+            e.preventDefault();
+            
+            if (!username) {
+                $('#username').addClass('is-invalid');
+            } else {
+                $('#username').removeClass('is-invalid');
+            }
+            
+            if (!password) {
+                $('#password').addClass('is-invalid');
+            } else {
+                $('#password').removeClass('is-invalid');
+            }
+            
+            return false;
+        }
+    });
+    
+    // Remove validation classes on input
+    $('#username, #password').on('input', function() {
+        $(this).removeClass('is-invalid');
+    });
+});
+</script>
+{% endblock %}

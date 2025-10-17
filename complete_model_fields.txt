@@ -1,0 +1,250 @@
+# Complete column mapping for file_processor.py:
+COLUMN_MAPPING = {
+    'internalId': 'internal_id',
+    'companyId': 'company_id',
+    'movementId': 'movement_id',
+    'branchId': 'branch_id',
+    'warehouseCode': 'warehouse_code',
+    'destinyWarehouseCode': 'destiny_warehouse_code',
+    'number': 'number',
+    'series': 'series',
+    'movementTypeCode': 'movement_type_code',
+    'type': 'type',
+    'status': 'status',
+    'printed': 'printed',
+    'documentPrinted': 'document_printed',
+    'billPrinted': 'bill_printed',
+    'registerDate': 'register_date',
+    'exitDate': 'exit_date',
+    'commercialRepresentativeCharge': 'commercial_representative_charge',
+    'grossValue': 'gross_value',
+    'netValue': 'net_value',
+    'informedNetValue': 'informed_net_value',
+    'otherValues': 'other_values',
+    'discountPercentage': 'discount_percentage',
+    'expensePercentage': 'expense_percentage',
+    'expenseValue': 'expense_value',
+    'extraPercentage1': 'extra_percentage1',
+    'extraValue1': 'extra_value1',
+    'extraPercentage2': 'extra_percentage2',
+    'extraValue2': 'extra_value2',
+    'transportedProductNetWeight': 'transported_product_net_weight',
+    'transportedProductGrossWeight': 'transported_product_gross_weight',
+    'classificationTable5Code': 'classification_table5_code',
+    'financialOptionalTable2Code': 'financial_optional_table2_code',
+    'netValueCurrencyCode': 'net_value_currency_code',
+    'date': 'date',
+    'hasGeneratedBill': 'has_generated_bill',
+    'auxCustomerVendorCode': 'aux_customer_vendor_code',
+    'auxCustomerVendorCompanyId': 'aux_customer_vendor_company_id',
+    'costCenterCode': 'cost_center_code',
+    'salesman1Code': 'salesman1_code',
+    'chargePercentage': 'charge_percentage',
+    'salesman2ChargePercentage': 'salesman2_charge_percentage',
+    'salesman3ChargePercentage': 'salesman3_charge_percentage',
+    'salesman4ChargePercentage': 'salesman4_charge_percentage',
+    'userCode': 'user_code',
+    'destinyBranchId': 'destiny_branch_id',
+    'lotGenerated': 'lot_generated',
+    'accountingExportStatus': 'accounting_export_status',
+    'deliveryDate': 'delivery_date',
+    'hasGeneratedWorkAccount': 'has_generated_work_account',
+    'workAccountGenerated': 'work_account_generated',
+    'lastEditTime': 'last_edit_time',
+    'indicateObjectUse': 'indicate_object_use',
+    'bonumIntegrated': 'bonum_integrated',
+    'processedFlag': 'processed_flag',
+    'icmsDeductionValue': 'icms_deduction_value',
+    'creationUser': 'creation_user',
+    'creationDate': 'creation_date',
+    'emailStatus': 'email_status',
+    'internalGrossValue': 'internal_gross_value',
+    'otherCompanyINSSBaseValue': 'other_company_inss_base_value',
+    'conditionalDiscountValue': 'conditional_discount_value',
+    'conditionalExpenseValue': 'conditional_expense_value',
+    'affectStockOrder': 'affect_stock_order',
+    'commercialAutomationExported': 'commercial_automation_exported',
+    'aplicationIntegration': 'aplication_integration',
+    'entryDate': 'entry_date',
+    'extemporaneous': 'extemporaneous',
+    'merchandiseValue': 'merchandise_value',
+    'usesFinancialValueApportionment': 'uses_financial_value_apportionment',
+    'conclusionFlag': 'conclusion_flag',
+    'paradigmaStatus': 'paradigma_status',
+    'paradigmaAutoIntegrated': 'paradigma_auto_integrated',
+    'originalGrossValue': 'original_gross_value',
+    'originalNetValue': 'original_net_value',
+    'originalOtherValues': 'original_other_values',
+    'operationId': 'operation_id',
+    'scpBranchId': 'scp_branch_id',
+    'movementItems': 'movement_items',
+    'payments': 'payments',
+    'costCenterApportionments': 'cost_center_apportionments',
+    'departmentApportionments': 'department_apportionments',
+    'taxes': 'taxes',
+    'fiscal': 'fiscal',
+    'norm': 'norm',
+    'cargoComponent': 'cargo_component',
+    'thirdPartyNF': 'third_party_nf',
+    'safetyDevice': 'safety_device',
+    'nfe': 'nfe',
+    'inputCTRC': 'input_ctrc',
+    'outputCTRC': 'output_ctrc',
+    'ctrc': 'ctrc',
+    'transportData': 'transport_data',
+    'documentAuthorization': 'document_authorization',
+    'judicialProcess': 'judicial_process',
+    'serviceOrder': 'service_order',
+    'relatedMovement': 'related_movement',
+    'exportRelatedMovement': 'export_related_movement',
+    'linkedMovement': 'linked_movement',
+    'cTe': 'c_te',
+    'eaiIntegration': 'eai_integration',
+    'electronicInvoiceFreeFields': 'electronic_invoice_free_fields',
+    'customerVendorCode': 'customer_vendor_code',
+    'paymentTermCode': 'payment_term_code',
+    'observation': 'observation',
+    'financialOptionalTable1Code': 'financial_optional_table1_code',
+    'financialEntryMovementId': 'financial_entry_movement_id',
+    'generatedEntryNumber': 'generated_entry_number',
+    'openEntryNumber': 'open_entry_number',
+    'cashAccountCode': 'cash_account_code',
+    'customerVendorCompanyId': 'customer_vendor_company_id',
+    'fluxusGroupedFlag': 'fluxus_grouped_flag',
+    'cashAccountCompanyId': 'cash_account_company_id',
+    'longHistory': 'long_history',
+}
+
+# Fields for FinancialMovement model:
+    internal_id = db.Column(db.String(50), nullable=True)
+    company_id = db.Column(db.String(50), nullable=True)
+    movement_id = db.Column(db.String(50), nullable=True)
+    branch_id = db.Column(db.String(50), nullable=True)
+    warehouse_code = db.Column(db.String(50), nullable=True)
+    destiny_warehouse_code = db.Column(db.String(50), nullable=True)
+    number = db.Column(db.String(255), nullable=True)
+    series = db.Column(db.String(255), nullable=True)
+    movement_type_code = db.Column(db.String(50), nullable=True)
+    type = db.Column(db.String(255), nullable=True)
+    status = db.Column(db.String(255), nullable=True)
+    printed = db.Column(db.Boolean, nullable=True)
+    document_printed = db.Column(db.Boolean, nullable=True)
+    bill_printed = db.Column(db.Boolean, nullable=True)
+    register_date = db.Column(db.DateTime, nullable=True)
+    exit_date = db.Column(db.DateTime, nullable=True)
+    commercial_representative_charge = db.Column(db.Float, nullable=True)
+    gross_value = db.Column(db.Float, nullable=True)
+    net_value = db.Column(db.Float, nullable=True)
+    informed_net_value = db.Column(db.Float, nullable=True)
+    other_values = db.Column(db.String(255), nullable=True)
+    discount_percentage = db.Column(db.Float, nullable=True)
+    expense_percentage = db.Column(db.Float, nullable=True)
+    expense_value = db.Column(db.Float, nullable=True)
+    extra_percentage1 = db.Column(db.String(255), nullable=True)
+    extra_value1 = db.Column(db.String(255), nullable=True)
+    extra_percentage2 = db.Column(db.String(255), nullable=True)
+    extra_value2 = db.Column(db.String(255), nullable=True)
+    transported_product_net_weight = db.Column(db.Float, nullable=True)
+    transported_product_gross_weight = db.Column(db.Float, nullable=True)
+    classification_table5_code = db.Column(db.String(50), nullable=True)
+    financial_optional_table2_code = db.Column(db.String(50), nullable=True)
+    net_value_currency_code = db.Column(db.String(50), nullable=True)
+    date = db.Column(db.String(255), nullable=True)
+    has_generated_bill = db.Column(db.Boolean, nullable=True)
+    aux_customer_vendor_code = db.Column(db.String(50), nullable=True)
+    aux_customer_vendor_company_id = db.Column(db.String(50), nullable=True)
+    cost_center_code = db.Column(db.String(50), nullable=True)
+    salesman1_code = db.Column(db.String(50), nullable=True)
+    charge_percentage = db.Column(db.Float, nullable=True)
+    salesman2_charge_percentage = db.Column(db.Float, nullable=True)
+    salesman3_charge_percentage = db.Column(db.Float, nullable=True)
+    salesman4_charge_percentage = db.Column(db.Float, nullable=True)
+    user_code = db.Column(db.String(50), nullable=True)
+    destiny_branch_id = db.Column(db.String(50), nullable=True)
+    lot_generated = db.Column(db.String(255), nullable=True)
+    accounting_export_status = db.Column(db.String(255), nullable=True)
+    delivery_date = db.Column(db.DateTime, nullable=True)
+    has_generated_work_account = db.Column(db.Boolean, nullable=True)
+    work_account_generated = db.Column(db.String(255), nullable=True)
+    last_edit_time = db.Column(db.DateTime, nullable=True)
+    indicate_object_use = db.Column(db.String(255), nullable=True)
+    bonum_integrated = db.Column(db.Boolean, nullable=True)
+    processed_flag = db.Column(db.Boolean, nullable=True)
+    icms_deduction_value = db.Column(db.Float, nullable=True)
+    creation_user = db.Column(db.String(255), nullable=True)
+    creation_date = db.Column(db.DateTime, nullable=True)
+    email_status = db.Column(db.String(255), nullable=True)
+    internal_gross_value = db.Column(db.Float, nullable=True)
+    other_company_inss_base_value = db.Column(db.Float, nullable=True)
+    conditional_discount_value = db.Column(db.Float, nullable=True)
+    conditional_expense_value = db.Column(db.Float, nullable=True)
+    affect_stock_order = db.Column(db.String(255), nullable=True)
+    commercial_automation_exported = db.Column(db.String(255), nullable=True)
+    aplication_integration = db.Column(db.String(255), nullable=True)
+    entry_date = db.Column(db.DateTime, nullable=True)
+    extemporaneous = db.Column(db.String(255), nullable=True)
+    merchandise_value = db.Column(db.Float, nullable=True)
+    uses_financial_value_apportionment = db.Column(db.Boolean, nullable=True)
+    conclusion_flag = db.Column(db.Boolean, nullable=True)
+    paradigma_status = db.Column(db.String(255), nullable=True)
+    paradigma_auto_integrated = db.Column(db.Boolean, nullable=True)
+    original_gross_value = db.Column(db.Float, nullable=True)
+    original_net_value = db.Column(db.Float, nullable=True)
+    original_other_values = db.Column(db.String(255), nullable=True)
+    operation_id = db.Column(db.String(50), nullable=True)
+    scp_branch_id = db.Column(db.String(50), nullable=True)
+    movement_items = db.Column(db.Text, nullable=True)  # JSON field
+    payments = db.Column(db.Text, nullable=True)  # JSON field
+    cost_center_apportionments = db.Column(db.Text, nullable=True)  # JSON field
+    department_apportionments = db.Column(db.Text, nullable=True)  # JSON field
+    taxes = db.Column(db.Text, nullable=True)  # JSON field
+    fiscal = db.Column(db.Text, nullable=True)  # JSON field
+    norm = db.Column(db.Text, nullable=True)  # JSON field
+    cargo_component = db.Column(db.Text, nullable=True)  # JSON field
+    third_party_nf = db.Column(db.Text, nullable=True)  # JSON field
+    safety_device = db.Column(db.Text, nullable=True)  # JSON field
+    nfe = db.Column(db.Text, nullable=True)  # JSON field
+    input_ctrc = db.Column(db.Text, nullable=True)  # JSON field
+    output_ctrc = db.Column(db.Text, nullable=True)  # JSON field
+    ctrc = db.Column(db.Text, nullable=True)  # JSON field
+    transport_data = db.Column(db.Text, nullable=True)  # JSON field
+    document_authorization = db.Column(db.Text, nullable=True)  # JSON field
+    judicial_process = db.Column(db.Text, nullable=True)  # JSON field
+    service_order = db.Column(db.Text, nullable=True)  # JSON field
+    related_movement = db.Column(db.Text, nullable=True)  # JSON field
+    export_related_movement = db.Column(db.Text, nullable=True)  # JSON field
+    linked_movement = db.Column(db.Text, nullable=True)  # JSON field
+    c_te = db.Column(db.Text, nullable=True)  # JSON field
+    eai_integration = db.Column(db.Text, nullable=True)  # JSON field
+    electronic_invoice_free_fields = db.Column(db.Text, nullable=True)  # JSON field
+    customer_vendor_code = db.Column(db.String(50), nullable=True)
+    payment_term_code = db.Column(db.String(50), nullable=True)
+    observation = db.Column(db.String(255), nullable=True)
+    financial_optional_table1_code = db.Column(db.String(50), nullable=True)
+    financial_entry_movement_id = db.Column(db.String(50), nullable=True)
+    generated_entry_number = db.Column(db.String(50), nullable=True)
+    open_entry_number = db.Column(db.String(50), nullable=True)
+    cash_account_code = db.Column(db.String(50), nullable=True)
+    customer_vendor_company_id = db.Column(db.String(50), nullable=True)
+    fluxus_grouped_flag = db.Column(db.Boolean, nullable=True)
+    cash_account_company_id = db.Column(db.String(50), nullable=True)
+    long_history = db.Column(db.String(255), nullable=True)
+
+# JSON field processing methods:
+    def get_json_field(self, field_name):
+        """Get a JSON field as a Python object"""
+        field_value = getattr(self, field_name, None)
+        if field_value:
+            try:
+                return json.loads(field_value) if isinstance(field_value, str) else field_value
+            except (json.JSONDecodeError, TypeError):
+                return []
+        return []
+
+    def set_json_field(self, field_name, value):
+        """Set a JSON field from a Python object"""
+        if value:
+            json_value = json.dumps(value) if not isinstance(value, str) else value
+            setattr(self, field_name, json_value)
+        else:
+            setattr(self, field_name, None)

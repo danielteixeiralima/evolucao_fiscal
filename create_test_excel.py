@@ -1,0 +1,142 @@
+import pandas as pd
+from datetime import datetime
+import json
+
+# Create a test Excel file with the new company and branch fields
+data = []
+
+# Create 5 test records with the new structure
+for i in range(1, 6):
+    record = {
+        # New company and branch fields (first 4 columns)
+        'Empresa_Code': f'EMP_{i:03d}',
+        'Empresa_Nome': f'Empresa Teste {i} Ltda',
+        'Filial_Code': f'FIL_{i:03d}',
+        'Filial_Nome': f'Filial {i} - Centro',
+        
+        # Existing core fields
+        'internalId': f'{i}|{400+i}',
+        'companyId': i,
+        'movementId': 400+i,
+        'branchId': i,
+        'warehouseCode': str(i),
+        'destinyWarehouseCode': str(i),
+        'number': 12000+i,
+        'series': 'A',
+        'movementTypeCode': '1.2.02',
+        'type': 'P',
+        'status': 'F',
+        'printed': False,
+        'documentPrinted': False,
+        'billPrinted': False,
+        'registerDate': datetime.now(),
+        'exitDate': datetime.now(),
+        'commercialRepresentativeCharge': 0.0,
+        'grossValue': 100.0 * i,
+        'netValue': 100.0 * i,
+        'informedNetValue': 0.0,
+        'otherValues': 100.0 * i,
+        'discountPercentage': 0.0,
+        'expensePercentage': 0.0,
+        'expenseValue': 0.0,
+        'extraPercentage1': 0.0,
+        'extraValue1': 0.0,
+        'extraPercentage2': 0.0,
+        'extraValue2': 0.0,
+        'transportedProductNetWeight': 0.0,
+        'transportedProductGrossWeight': 0.0,
+        'classificationTable5Code': '',
+        'financialOptionalTable2Code': '',
+        'netValueCurrencyCode': 'R$',
+        'date': datetime.now(),
+        'hasGeneratedBill': False,
+        'auxCustomerVendorCode': f'C{i:05d}',
+        'auxCustomerVendorCompanyId': 0,
+        'costCenterCode': '',
+        'salesman1Code': '',
+        'chargePercentage': 0.0,
+        'salesman2ChargePercentage': 0.0,
+        'salesman3ChargePercentage': 0.0,
+        'salesman4ChargePercentage': 0.0,
+        'userCode': 'testuser',
+        'destinyBranchId': i,
+        'lotGenerated': False,
+        'accountingExportStatus': '0',
+        'deliveryDate': '',
+        'hasGeneratedWorkAccount': False,
+        'workAccountGenerated': 'false',
+        'lastEditTime': datetime.now(),
+        'indicateObjectUse': '0',
+        'bonumIntegrated': False,
+        'processedFlag': False,
+        'icmsDeductionValue': 0.0,
+        'creationUser': 'testuser',
+        'creationDate': datetime.now(),
+        'emailStatus': 'false',
+        'internalGrossValue': 100.0 * i,
+        'otherCompanyINSSBaseValue': 0.0,
+        'conditionalDiscountValue': 0.0,
+        'conditionalExpenseValue': 0.0,
+        'affectStockOrder': str(400+i),
+        'commercialAutomationExported': 0,
+        'aplicationIntegration': 'T',
+        'entryDate': datetime.now(),
+        'extemporaneous': 0,
+        'merchandiseValue': 0.0,
+        'usesFinancialValueApportionment': False,
+        'conclusionFlag': 0,
+        'paradigmaStatus': 'N',
+        'paradigmaAutoIntegrated': False,
+        'originalGrossValue': 0.0,
+        'originalNetValue': 0.0,
+        'originalOtherValues': 0.0,
+        'operationId': 0,
+        'scpBranchId': 0,
+        'movementItems': '[]',
+        'payments': '[]',
+        'costCenterApportionments': '[]',
+        'departmentApportionments': '[]',
+        'taxes': '[]',
+        'fiscal': '[]',
+        'norm': '[]',
+        'cargoComponent': '[]',
+        'thirdPartyNF': '[]',
+        'safetyDevice': '[]',
+        'nfe': '[]',
+        'inputCTRC': '[]',
+        'outputCTRC': '[]',
+        'ctrc': '[]',
+        'transportData': '[]',
+        'documentAuthorization': '[]',
+        'judicialProcess': '[]',
+        'serviceOrder': '[]',
+        'relatedMovement': '[]',
+        'exportRelatedMovement': '[]',
+        'linkedMovement': '[]',
+        'cTe': '[]',
+        'eaiIntegration': '[]',
+        'electronicInvoiceFreeFields': '[]',
+        'customerVendorCode': f'C{i:05d}',
+        'paymentTermCode': '30.0',
+        'observation': f'Teste de movimento {i} com dados de empresa',
+        'financialOptionalTable1Code': '2.0',
+        'financialEntryMovementId': f'{400+i}.0',
+        'generatedEntryNumber': '1.0',
+        'openEntryNumber': '1.0',
+        'cashAccountCode': '2.0',
+        'customerVendorCompanyId': 0,
+        'fluxusGroupedFlag': False,
+        'cashAccountCompanyId': i
+    }
+    data.append(record)
+
+# Create DataFrame and save to Excel
+df = pd.DataFrame(data)
+filename = 'test_excel_with_company_branch.xlsx'
+df.to_excel(filename, index=False)
+print(f"Created test Excel file: {filename}")
+print(f"Columns: {len(df.columns)}")
+print(f"Records: {len(df)}")
+print("First 4 columns (new):")
+for col in df.columns[:4]:
+    print(f"  {col}: {df[col].iloc[0]}")

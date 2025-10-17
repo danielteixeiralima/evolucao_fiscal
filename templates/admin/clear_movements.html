@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Clear All Movements - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                Clear All Financial Movements
+            </h2>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="alert alert-danger">
+                <h5 class="alert-heading">
+                    <i class="fas fa-skull-crossbones me-2"></i>
+                    DANGER ZONE
+                </h5>
+                <p class="mb-0">This action will permanently delete ALL financial movement data and upload history from the database. This action cannot be undone!</p>
+            </div>
+            
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-database me-2"></i>
+                        Database Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <div class="card bg-primary bg-opacity-10 border-primary">
+                                <div class="card-body">
+                                    <h2 class="text-primary">{{ movement_count }}</h2>
+                                    <p class="mb-0">Financial Movements</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-info bg-opacity-10 border-info">
+                                <div class="card-body">
+                                    <h2 class="text-info">{{ upload_count }}</h2>
+                                    <p class="mb-0">Upload Records</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if movement_count == 0 and upload_count == 0 %}
+                    <div class="alert alert-success mt-3">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Database is already empty. No data to delete.
+                    </div>
+                    {% else %}
+                    <form method="POST" class="mt-4">
+                        <div class="alert alert-warning">
+                            <h6 class="alert-heading">Confirmation Required</h6>
+                            <p class="mb-3">
+                                To confirm deletion of ALL financial movement data, type exactly:
+                                <strong class="text-danger">"delete all movements"</strong>
+                            </p>
+                            
+                            <div class="form-group">
+                                <input type="text" 
+                                       name="confirmation" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="Type: delete all movements"
+                                       required
+                                       autocomplete="off">
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Cancel & Go Back
+                            </a>
+                            
+                            <button type="submit" 
+                                    class="btn btn-danger btn-lg"
+                                    onclick="return confirm('Are you absolutely sure? This will delete ALL financial movement data permanently!')">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                DELETE ALL MOVEMENTS
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        What will be deleted?
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-times text-danger me-2"></i>
+                            All financial movement records ({{ movement_count }} records)
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-times text-danger me-2"></i>
+                            All upload history records ({{ upload_count }} records)
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-times text-danger me-2"></i>
+                            All batch tracking information
+                        </li>
+                    </ul>
+                    
+                    <h6 class="text-success mt-3">What will be kept?</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            All user accounts and login information
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            System configuration and settings
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Database structure (tables will remain, just empty)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Add visual feedback when typing confirmation
+    $('input[name="confirmation"]').on('input', function() {
+        const value = $(this).val().toLowerCase().trim();
+        const submitBtn = $('button[type="submit"]');
+        
+        if (value === 'delete all movements') {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+            submitBtn.prop('disabled', false);
+        } else {
+            $(this).removeClass('is-valid').addClass('is-invalid');
+            submitBtn.prop('disabled', true);
+        }
+    });
+    
+    // Initially disable submit button
+    $('button[type="submit"]').prop('disabled', true);
+});
+</script>
+{% endblock %}

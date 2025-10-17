@@ -1,0 +1,478 @@
+
+
+
+
+
+Eu preciso que você me ajude a criar uma aplicação em flask aonde vamos ter uma parte de admin, aonde o admin vai poder cadastrar novos usuários. 
+
+Alem disso, o Admin vai poder subir documentos em lotes. Esse documento será um xlsx estruturado com essas colunas na sequencia. Vou te mandar o nome da coluna e o formato que vai vir o dado:   internalId - 
+1|91
+1|122
+1|123
+
+companyId - 
+1
+1
+1
+movementId -
+91
+122
+123
+branchId -
+1
+1
+1
+warehouseCode - 
+01
+01
+01
+destinyWarehouseCode -
+01
+01
+01
+number -
+000002
+128652
+128635
+series - 
+OR
+U
+U
+movementTypeCode -
+5.1.02
+1.2.02
+1.2.02
+type -
+S
+P
+P
+status -
+N
+F
+F
+printed -
+FALSO
+FALSO
+FALSO
+documentPrinted -
+FALSO
+FALSO
+FALSO
+billPrinted -
+FALSO
+FALSO
+FALSO
+registerDate -
+
+2003-08-01T00:00:00-03:00
+2003-08-04T00:00:00-03:00
+2003-08-04T00:00:00-03:00
+exitDate-
+2003-08-01T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+commercialRepresentativeCharge -
+0
+0
+0
+grossValue -
+500
+570
+1710
+netValue - 
+500
+627
+1881
+informedNetValue -
+0
+0
+0
+otherValues - 
+500
+570
+1710
+discountPercentage -
+0
+0
+0
+expensePercentage -
+0
+0
+0
+expenseValue -
+0
+0
+0
+extraPercentage1 -
+0
+0
+0
+extraValue1 -
+0
+0
+0
+extraPercentage2 -
+0
+0
+0
+extraValue2 -
+0
+0
+0
+transportedProductNetWeight -
+0
+0
+0
+transportedProductGrossWeight -
+0
+0
+0
+classificationTable5Code -
+12305016
+
+
+financialOptionalTable2Code -
+1.2.3.05.016
+
+
+netValueCurrencyCode -
+R$
+R$
+R$
+date - 
+2003-08-01T00:00:00-03:00
+2003-08-04T00:00:00-03:00
+2003-08-04T00:00:00-03:00
+hasGeneratedBill -
+FALSO
+FALSO
+FALSO
+auxCustomerVendorCode -
+CXXXXXXXXXX
+F00007
+F00007
+auxCustomerVendorCompanyId -
+0
+0
+0
+costCenterCode -
+1.2.020
+
+
+salesman1Code -
+salesman1Code
+00001
+
+
+chargePercentage -
+0
+0
+0
+salesman2ChargePercentage -
+0
+0
+0
+salesman3ChargePercentage -
+0
+0
+0
+salesman4ChargePercentage - 
+0
+0
+0
+userCode -
+mestre
+mestre
+mestre
+destinyBranchId -
+1
+1
+1
+lotGenerated -
+FALSO
+FALSO
+FALSO
+accountingExportStatus -
+0
+0
+0
+deliveryDate -
+2003-08-01T00:00:00-03:00
+
+
+hasGeneratedWorkAccount -
+FALSO
+FALSO
+FALSO
+workAccountGenerated -
+FALSO
+FALSO
+FALSO
+lastEditTime -
+2003-08-01T09:19:24-03:00
+2003-08-08T15:34:41-03:00
+2003-08-08T15:33:33-03:00
+indicateObjectUse -
+0
+0
+0
+bonumIntegrated -
+FALSO
+FALSO
+FALSO
+processedFlag -
+FALSO
+FALSO
+FALSO
+icmsDeductionValue -
+0
+0
+0
+creationUser -
+mestre
+mestre
+mestre
+creationDate -
+2003-08-01T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+emailStatus -
+FALSO
+FALSO
+FALSO
+internalGrossValue -
+500
+570
+1710
+otherCompanyINSSBaseValue -
+0
+0
+0
+conditionalDiscountValue -
+0
+0
+0
+conditionalExpenseValue -
+0
+0
+0
+affectStockOrder -
+91
+122
+123
+commercialAutomationExported -
+0
+0
+0
+aplicationIntegration -
+T
+T
+T
+entryDate -
+2003-08-01T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+2003-08-07T00:00:00-03:00
+extemporaneous -
+0
+0
+0
+merchandiseValue -
+0
+0
+0
+usesFinancialValueApportionment -
+FALSO
+FALSO
+FALSO
+conclusionFlag -
+0
+0
+0
+paradigmaStatus -
+N
+N
+N
+paradigmaAutoIntegrated -
+FALSO
+FALSO
+FALSO
+originalGrossValue -
+0
+0
+0
+originalNetValue -
+0
+0
+0
+originalOtherValues - 
+0
+0
+0
+operationId - 
+0
+0
+0
+scpBranchId -
+0
+0
+0
+movementItems - 
+
+[{'companyId': 1, 'movementId': 91, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 812, 'quantity': 1.0, 'unitPrice': 500.0, 'tablePrice': 0.0, 'discountValue': 0.0, 'registerDate': '2003-08-01T00:00:00-03:00', 'classificationTable5Code': '12305016', 'financialOptionalTable2Code': '1.2.3.05.016', 'measureUnitCode': 'vb', 'receivableQuantity': 1.0, 'deliveryDate': '2003-08-01T00:00:00-03:00', 'partialBillingReceivedValue': 0.0, 'completedValue': 0.0, 'unitValue': 0.0, 'financialValue': 0.0, 'ordinationTaxAliquot': 0.0, 'originalQuantity': 1.0, 'flag': 0, 'blockObject': 0, 'rebillingFlag': 0, 'measureUnitConversionRate': 0.0, 'totalValue': 500.0, 'branchId': 1, 'sortedQuantity': 0.0, 'commercialRepresentativeChargePercentage': 0.0, 'fiscalBookkeepingValue': 0.0, 'orderFinancialValue': 0.0, 'ctrcFreightValue': 0.0, 'optionalFormulaValue1': 0.0, 'optionalFormulaValue2': 0.0, 'editedPrice': False, 'unitaryOccupiedVolumeNumber': 1, 'editedTotalPrice': 0, 'conditionalDiscountValue': 0.0, 'conditionalExpenseValue': 0.0, 'budgetDate': '2014-12-04T00:00:00-03:00', 'freightApportionment': 0.0, 'insuranceApportionment': 0.0, 'discountApportionment': 0.0, 'expenseApportionment': 0.0, 'extraValue1Apportionment': 0.0, 'extraValue2Apportionment': 0.0, 'ctrcFreightApportionment': 0.0, 'materialDeductionApportionment': 0.0, 'subcontractingDeductionApportionment': 0.0, 'otherDeductionApportionment': 0.0, 'budgetUnitPrice': 0.0, 'nFeServiceValue': 0.0, 'warehouseCode': '01', 'heritageValue': 0.0, 'heritageBaseDepreciationValue': 0.0, 'netValue': 500.0, 'grossValue': 0.0, 'originalGrossValue': 0.0, 'costCenterDepartmentApportionmentValue': 0.0, 'replenishmentCost': 0.0, 'bReplenishmentCost': 0.0, 'thirdPartyFinancialValue': 0.0, 'totalQuantity': 1.0, 'isSubstituteProduct': 0, 'unitPriceSelectionType': 0, 'financialValueApportionment': 0.0, 'completedQuantity': 0.0, 'aplicationIntegration': 'T', 'productFantasyName': 'SERVICOS EM GERAL', 'productCode': '99.01.0001', 'productReducedCode': '812', 'manufacturerProductNumber': '99.01.0000', 'manufacturerCode': '00001', 'complementaryFields': {}, 'costCenterApportionments': [], 'departmentApportionments': [], 'taxes': [], 'itemLots': [], 'itemGrids': [], 'itemSerialNumber': [], 'itemHeritage': [], 'siscoServFitting': [], 'fiscal': [], 'reserves': [], 'relatedItem': [], 'exportRelatedItem': [], 'linkedItem': [], 'exportMemo': [], 'judicialProcess': [], 'electronicInvoiceFreeFields': []}]
+[{'companyId': 1, 'movementId': 122, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 146, 'quantity': 100.0, 'unitPrice': 5.7, 'tablePrice': 0.0, 'discountValue': 0.0, 'registerDate': '2003-08-04T00:00:00-03:00', 'measureUnitCode': 'SC', 'receivableQuantity': 100.0, 'partialBillingReceivedValue': 0.0, 'completedValue': 0.0, 'stockEffectFlag': 1, 'unitValue': 6.27, 'financialValue': 627.0, 'ordinationTaxAliquot': 0.0, 'originalQuantity': 100.0, 'flag': 0, 'blockObject': 0, 'rebillingFlag': 0, 'measureUnitConversionRate': 0.0, 'totalValue': 570.0, 'branchId': 1, 'sortedQuantity': 0.0, 'commercialRepresentativeChargePercentage': 0.0, 'fiscalBookkeepingValue': 0.0, 'orderFinancialValue': 0.0, 'ctrcFreightValue': 0.0, 'optionalFormulaValue1': 0.0, 'optionalFormulaValue2': 0.0, 'editedPrice': False, 'unitaryOccupiedVolumeNumber': 1, 'editedTotalPrice': 0, 'conditionalDiscountValue': 0.0, 'conditionalExpenseValue': 0.0, 'budgetDate': '2014-12-04T00:00:00-03:00', 'freightApportionment': 0.0, 'insuranceApportionment': 0.0, 'discountApportionment': 0.0, 'expenseApportionment': 0.0, 'extraValue1Apportionment': 0.0, 'extraValue2Apportionment': 0.0, 'ctrcFreightApportionment': 0.0, 'materialDeductionApportionment': 0.0, 'subcontractingDeductionApportionment': 0.0, 'otherDeductionApportionment': 0.0, 'budgetUnitPrice': 0.0, 'nFeServiceValue': 0.0, 'warehouseCode': '01', 'heritageValue': 0.0, 'heritageBaseDepreciationValue': 0.0, 'netValue': 570.0, 'grossValue': 0.0, 'originalGrossValue': 0.0, 'costCenterDepartmentApportionmentValue': 0.0, 'replenishmentCost': 0.0, 'bReplenishmentCost': 0.0, 'thirdPartyFinancialValue': 0.0, 'totalQuantity': 100.0, 'isSubstituteProduct': 0, 'unitPriceSelectionType': 0, 'financialValueApportionment': 0.0, 'completedQuantity': 0.0, 'aplicationIntegration': 'T', 'productFantasyName': 'ARGAMASSA TRADICIONAL', 'productCode': '01.14.0002', 'productReducedCode': '146', 'manufacturerProductNumber': '01.14.0002', 'manufacturerCode': '00001', 'complementaryFields': {}, 'costCenterApportionments': [], 'departmentApportionments': [], 'taxes': [{'companyId': 1, 'movementId': 122, 'movementItemSequentialId': 1, 'taxId': 'ICMS', 'calculationBasis': 627.0, 'aliquot': 0.0, 'value': 0.0, 'calculatedCalculationBasis': 627.0, 'edited': 0, 'fullBase': 0.0}, {'companyId': 1, 'movementId': 122, 'movementItemSequentialId': 1, 'taxId': 'IPI', 'calculationBasis': 570.0, 'aliquot': 10.0, 'value': 57.0, 'calculatedCalculationBasis': 570.0, 'edited': 0, 'fullBase': 0.0}], 'itemLots': [], 'itemGrids': [], 'itemSerialNumber': [], 'itemHeritage': [], 'siscoServFitting': [], 'fiscal': [], 'reserves': [], 'relatedItem': [], 'exportRelatedItem': [], 'linkedItem': [], 'exportMemo': [], 'judicialProcess': [], 'electronicInvoiceFreeFields': []}]
+[{'companyId': 1, 'movementId': 123, 'sequentialId': 1, 'sequentialNumber': 1, 'productId': 146, 'quantity': 300.0, 'unitPrice': 5.7, 'tablePrice': 0.0, 'discountValue': 0.0, 'registerDate': '2003-08-04T00:00:00-03:00', 'measureUnitCode': 'SC', 'receivableQuantity': 300.0, 'partialBillingReceivedValue': 0.0, 'completedValue': 0.0, 'stockEffectFlag': 1, 'unitValue': 6.27, 'financialValue': 1881.0, 'ordinationTaxAliquot': 0.0, 'originalQuantity': 300.0, 'flag': 0, 'blockObject': 0, 'rebillingFlag': 0, 'measureUnitConversionRate': 0.0, 'totalValue': 1710.0, 'branchId': 1, 'sortedQuantity': 0.0, 'commercialRepresentativeChargePercentage': 0.0, 'fiscalBookkeepingValue': 0.0, 'orderFinancialValue': 0.0, 'ctrcFreightValue': 0.0, 'optionalFormulaValue1': 0.0, 'optionalFormulaValue2': 0.0, 'editedPrice': False, 'unitaryOccupiedVolumeNumber': 1, 'editedTotalPrice': 0, 'conditionalDiscountValue': 0.0, 'conditionalExpenseValue': 0.0, 'budgetDate': '2014-12-04T00:00:00-03:00', 'freightApportionment': 0.0, 'insuranceApportionment': 0.0, 'discountApportionment': 0.0, 'expenseApportionment': 0.0, 'extraValue1Apportionment': 0.0, 'extraValue2Apportionment': 0.0, 'ctrcFreightApportionment': 0.0, 'materialDeductionApportionment': 0.0, 'subcontractingDeductionApportionment': 0.0, 'otherDeductionApportionment': 0.0, 'budgetUnitPrice': 0.0, 'nFeServiceValue': 0.0, 'warehouseCode': '01', 'heritageValue': 0.0, 'heritageBaseDepreciationValue': 0.0, 'netValue': 1710.0, 'grossValue': 0.0, 'originalGrossValue': 0.0, 'costCenterDepartmentApportionmentValue': 0.0, 'replenishmentCost': 0.0, 'bReplenishmentCost': 0.0, 'thirdPartyFinancialValue': 0.0, 'totalQuantity': 300.0, 'isSubstituteProduct': 0, 'unitPriceSelectionType': 0, 'financialValueApportionment': 0.0, 'completedQuantity': 0.0, 'aplicationIntegration': 'T', 'productFantasyName': 'ARGAMASSA TRADICIONAL', 'productCode': '01.14.0002', 'productReducedCode': '146', 'manufacturerProductNumber': '01.14.0002', 'manufacturerCode': '00001', 'complementaryFields': {}, 'costCenterApportionments': [], 'departmentApportionments': [], 'taxes': [{'companyId': 1, 'movementId': 123, 'movementItemSequentialId': 1, 'taxId': 'ICMS', 'calculationBasis': 1881.0, 'aliquot': 0.0, 'value': 0.0, 'calculatedCalculationBasis': 1881.0, 'edited': 0, 'fullBase': 0.0}, {'companyId': 1, 'movementId': 123, 'movementItemSequentialId': 1, 'taxId': 'IPI', 'calculationBasis': 1710.0, 'aliquot': 10.0, 'value': 171.0, 'calculatedCalculationBasis': 1710.0, 'edited': 0, 'fullBase': 0.0}], 'itemLots': [], 'itemGrids': [], 'itemSerialNumber': [], 'itemHeritage': [], 'siscoServFitting': [], 'fiscal': [], 'reserves': [], 'relatedItem': [], 'exportRelatedItem': [], 'linkedItem': [], 'exportMemo': [], 'judicialProcess': [], 'electronicInvoiceFreeFields': []}]
+payments -
+[]
+[]
+[]
+costCenterApportionments -
+
+[]
+[{'companyId': 1, 'apportionmentId': 1, 'movementId': 122, 'costCenterCode': '1.4.008', 'value': 627.0, 'costCenterName': 'EXPANSÃO SPC'}]
+[{'companyId': 1, 'apportionmentId': 2, 'movementId': 123, 'costCenterCode': '1.4.008', 'value': 1881.0, 'costCenterName': 'EXPANSÃO SPC'}]
+departmentApportionments -
+[]
+[{'companyId': 1, 'movementId': 122, 'branchId': 1, 'departmentCode': '10', 'value': 627.0, 'departmentName': 'OBRAS'}]
+[{'companyId': 1, 'movementId': 123, 'branchId': 1, 'departmentCode': '10', 'value': 1881.0, 'departmentName': 'OBRAS'}]
+taxes -
+[]
+[{'companyId': 1, 'movementId': 122, 'movementItemSequentialId': 0, 'taxId': 'PIS', 'calculationBasis': 627.0, 'aliquot': 1.65, 'value': 10.35, 'calculatedCalculationBasis': 627.0, 'edited': 0, 'fullBase': 0.0}]
+[{'companyId': 1, 'movementId': 123, 'movementItemSequentialId': 0, 'taxId': 'PIS', 'calculationBasis': 1881.0, 'aliquot': 1.65, 'value': 31.04, 'calculatedCalculationBasis': 1881.0, 'edited': 0, 'fullBase': 0.0}]
+fiscal -
+[]
+[]
+[]
+norm -
+[]
+[]
+[]
+cargoComponent -
+[]
+[]
+[]
+thirdPartyNF -
+[]
+[]
+[]
+safetyDevice -
+[]
+[]
+[]
+nfe -
+[]
+[]
+[]
+inputCTRC -
+[]
+[]
+[]
+outputCTRC -
+[]
+[]
+[]
+ctrc -
+[]
+[]
+[]
+transportData -
+[]
+[]
+[]
+documentAuthorization -
+[]
+[]
+[]
+judicialProcess -
+[]
+[]
+[]
+serviceOrder -
+[]
+[]
+[]
+relatedMovement -
+[]
+[]
+[]
+exportRelatedMovement -
+[]
+[]
+[]
+linkedMovement -
+[]
+[]
+[]
+cTe -
+[]
+[]
+[]
+eaiIntegration -
+[]
+[]
+[]
+electronicInvoiceFreeFields -
+[]
+[]
+[]
+customerVendorCode -
+
+F00007
+F00007
+paymentTermCode -
+
+45
+45
+observation -
+
+
+CANTRATO ARCO IRIS
+contraro arco iris
+financialOptionalTable1Code - 
+
+02
+02
+financialEntryMovementId -
+
+122
+123
+generatedEntryNumber -
+
+1
+1
+openEntryNumber -
+
+1
+1
+cashAccountCode -
+
+02
+02
+customerVendorCompanyId -
+
+0
+0
+fluxusGroupedFlag -
+
+0
+0
+cashAccountCompanyId -
+
+1
+1
+longHistory -
+
+
+
+
+O usuário final vai poder ver no detalhe o que tiver na base que o admin vai subir. Consegue me ajudar a criar essa aplicação de forma completa? Veja as colunas aonde temos json estruturados, para exibirmos as informações formatadas corretamente pro usuário. 
+
+ 
+
+
+
+
+
+
+
+
+	
