@@ -394,8 +394,14 @@
                             <span class="badge bg-primary">{{ item.sequentialNumber or item.sequentialId or loop.index }}</span>
                         </td>
                         <td>
+                        {% if item.productFantasyName %}
+                            <strong class="text-primary">{{ item.productFantasyName }}</strong>
+                            
+                        {% else %}
                             <strong class="text-primary">{{ item.productCode or '-' }}</strong>
-                        </td>
+                        {% endif %}
+                    </td>
+
 
                         <td>
                             {{ item.description or '-' }}
@@ -418,14 +424,16 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if item.financialValue %}
-                            <strong class="text-success">R$ {{ "%.2f"|format(item.financialValue) }}</strong>
-                            {% elif item.unitPrice and item.quantity %}
-                            <strong class="text-success">R$ {{ "%.2f"|format(item.unitPrice * item.quantity) }}</strong>
+                            {% if item.unitPrice and item.quantity %}
+                                <strong class="text-success">
+                                    R$ {{ "%.2f"|format((item.unitPrice | float) * (item.quantity | float)) }}
+                                </strong>
                             {% else %}
-                            -
+                                <span class="text-muted">-</span>
                             {% endif %}
                         </td>
+
+
                         <td>
                             {% if item.registerDate %}
                                 {% set d = item.registerDate[:10].split('-') %}
