@@ -20,10 +20,11 @@
     <div class="card-body">
         <form method="GET" class="row g-3">
             <div class="col-md-4">
-                <label for="search" class="form-label">Busca</label>
-                <input type="text" class="form-control" id="search" name="search" 
-                       value="{{ search }}" 
-                       placeholder="Buscar por ID, número, cliente/fornecedor, observação...">
+                <label for="search" class="form-label">Buscar movimentos</label>
+                <input type="text" class="form-control" id="search" name="search"
+                    value="{{ search }}"
+                    placeholder="Buscar pelo número do movimento...">
+
             </div>
             <div class="col-md-2">
                 <label for="start_date" class="form-label">Período inicial</label>
@@ -112,47 +113,54 @@
                 <thead class="table-dark">
                     <tr>
                         <th>N° da NF</th>
-                        <th>Empresa</th>
-                        <th>Filial</th>
+                        <th style="display:none;">Número do Movimento (oculto)</th>
+                        <!-- <th>Empresa</th> -->
+                        <!-- <th>Filial</th> -->
                         <th>Cliente/Fornecedor</th>
                         <th>Valor total da nota</th>
                         <th>Data</th>
-                        <th>Status</th>
-                        <th>Ações</th>
+                        <!-- <th>Status</th> -->
                         <th>ID interno</th>
+                        <th>Ações</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                     {% for movement in movements.items %}
                     <tr>
                         <td>{{ movement.number or '-' }}</td>
-                        <td>
-                            {% if movement.empresa_code and movement.empresa_nome %}
-                                {{ movement.empresa_code }} - {{ movement.empresa_nome }}
+                        <td style="display:none;">{{ movement.movement_type_code or '' }}</td>
+                        <!-- <td>
+                            {% if movement.empresa_nome %}
+                                {{ movement.empresa_nome }}
                             {% else %}
                                 <span class="text-muted">-</span>
                             {% endif %}
                         </td>
+
                         <td>
-                            {% if movement.filial_nome and movement.filial_cnpj %}
-                                {{ movement.filial_nome }}<br>
-                                <small class="text-muted">{{ movement.filial_cnpj }}</small>
-                            {% elif movement.filial_nome %}
-                                {{ movement.filial_nome }}
+                            {% if movement.filial_code %}
+                                {{ movement.filial_code }}
+                            {% elif movement.branch_id %}
+                                {{ movement.branch_id }}
                             {% else %}
                                 <span class="text-muted">-</span>
                             {% endif %}
-                        </td>
+                        </td> -->
+
+
                         <td>
-                            {% if movement.customer_vendor_name and movement.customer_vendor_cnpj %}
-                                {{ movement.customer_vendor_name }}<br>
-                                <small class="text-muted">CNPJ: {{ movement.customer_vendor_cnpj }}</small>
+                            {% if movement.aux_customer_vendor_code and movement.customer_vendor_name and movement.customer_vendor_cnpj %}
+                                {{ movement.aux_customer_vendor_code }} - {{ movement.customer_vendor_name }} - {{ movement.customer_vendor_cnpj }}
+                            {% elif movement.aux_customer_vendor_code and movement.customer_vendor_name %}
+                                {{ movement.aux_customer_vendor_code }} - {{ movement.customer_vendor_name }}
                             {% elif movement.aux_customer_vendor_code %}
-                                <strong>{{ movement.aux_customer_vendor_code }}</strong>
+                                {{ movement.aux_customer_vendor_code }}
                             {% else %}
                                 <span class="text-muted">-</span>
                             {% endif %}
                         </td>
+
                         <td>
                             {% if movement.gross_value is not none %}
                                 <span class="badge bg-success">
@@ -171,7 +179,7 @@
                                 <span class="text-muted">-</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <!-- <td>
                             {% if movement.status %}
                                 <span class="badge {% if movement.status == 'F' %}bg-success{% elif movement.status == 'N' %}bg-warning{% else %}bg-secondary{% endif %}">
                                     {{ movement.status }}
@@ -179,6 +187,10 @@
                             {% else %}
                                 <span class="text-muted">-</span>
                             {% endif %}
+                        </td> -->
+                        
+                        <td>
+                            <code class="text-primary">{{ movement.internal_id or '-' }}</code>
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
@@ -192,9 +204,6 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
-                        </td>
-                        <td>
-                            <code class="text-primary">{{ movement.internal_id or '-' }}</code>
                         </td>
                     </tr>
                     {% endfor %}
@@ -355,17 +364,52 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
-    // Focus search input if there's no search term
     if (!$('#search').val()) {
         $('#search').focus();
     }
     
-    // Enable advanced search with Enter key
     $('#search').keypress(function(e) {
         if (e.which == 13) {
             $(this).closest('form').submit();
         }
     });
+
+    if ($('#movementsTable').length) {
+        if (!$.fn.DataTable.isDataTable('#movementsTable')) {
+            $('#movementsTable').DataTable({
+                responsive: true,
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                language: {
+                    search: "Buscar movimentos:",
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    info: "Exibindo _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "Nenhum registro disponível",
+                    infoFiltered: "(filtrado de _MAX_ registros no total)",
+                    paginate: {
+                        first: "Primeiro",
+                        last: "Último",
+                        next: "Próximo",
+                        previous: "Anterior"
+                    }
+                },
+                order: [],
+                columnDefs: [
+                    { targets: [-1], orderable: false },
+                    { targets: [4], type: 'currency' },
+                    { targets: [1], visible: false, searchable: true }
+                ],
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                initComplete: function() {
+                    $('.dataTables_length select').addClass('form-select form-select-sm');
+                    $('.dataTables_filter input').addClass('form-control form-control-sm');
+                }
+            });
+        }
+    }
+
 });
 
 function confirmDelete(movementId, movementName) {
@@ -375,7 +419,6 @@ function confirmDelete(movementId, movementName) {
 }
 
 function exportData() {
-    // Simple CSV export functionality
     let table = document.getElementById('movementsTable');
     let csv = [];
     let rows = table.querySelectorAll('tr');
@@ -383,14 +426,13 @@ function exportData() {
     for (let i = 0; i < rows.length; i++) {
         let row = [], cols = rows[i].querySelectorAll('td, th');
         
-        for (let j = 0; j < cols.length - 1; j++) { // Exclude actions column
+        for (let j = 0; j < cols.length - 1; j++) {
             row.push(cols[j].innerText);
         }
         
         csv.push(row.join(','));
     }
     
-    // Download CSV
     let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
     let downloadLink = document.createElement('a');
     downloadLink.download = 'financial_movements.csv';

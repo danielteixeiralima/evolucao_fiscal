@@ -60,6 +60,8 @@ class FinancialMovement(db.Model):
     date = db.Column(db.DateTime, nullable=True)
     has_generated_bill = db.Column(db.Boolean, nullable=True)
     aux_customer_vendor_code = db.Column(db.String(50), nullable=True)
+    customer_vendor_name = db.Column(db.String(255), nullable=True)
+    customer_vendor_cnpj = db.Column(db.String(30), nullable=True)
     aux_customer_vendor_company_id = db.Column(db.Integer, nullable=True)
     cost_center_code = db.Column(db.String(50), nullable=True)
     salesman1_code = db.Column(db.String(50), nullable=True)

@@ -46,18 +46,19 @@ function initializeDataTables() {
         pageLength: 25,
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         language: {
-            search: "Search records:",
-            lengthMenu: "Show _MENU_ records per page",
-            info: "Showing _START_ to _END_ of _TOTAL_ records",
-            infoEmpty: "No records available",
-            infoFiltered: "(filtered from _MAX_ total records)",
+            search: "Buscar movimentos:",
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            info: "Exibindo _START_ a _END_ de _TOTAL_ registros",
+            infoEmpty: "Nenhum registro disponível",
+            infoFiltered: "(filtrado de _MAX_ registros no total)",
             paginate: {
-                first: "First",
-                last: "Last",
-                next: "Next",
-                previous: "Previous"
+                first: "Primeiro",
+                last: "Último",
+                next: "Próximo",
+                previous: "Anterior"
             }
         },
+
         dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
              '<"row"<"col-sm-12"tr>>' +
              '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',

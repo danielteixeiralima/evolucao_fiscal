@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>
         <i class="fas fa-file-alt me-3"></i>
-        Movement Details
+        Detalhes de movimento
     </h1>
     <div class="btn-group" role="group">
         <a href="{{ url_for('main.movements') }}" class="btn btn-outline-secondary">
@@ -26,9 +26,9 @@
         <h5 class="mb-0">
             <i class="fas fa-info-circle me-2"></i>
             {% if movement.internal_id %}
-            Movement {{ movement.internal_id }}
+            Movimento {{ movement.internal_id }}
             {% else %}
-            Movement #{{ movement.id }}
+            Movimento {{ movement.id }}
             {% endif %}
             {% if movement.status %}
             <span class="badge {% if movement.status == 'F' %}bg-success{% elif movement.status == 'N' %}bg-warning{% else %}bg-secondary{% endif %} ms-2">
@@ -72,23 +72,15 @@
                             <i class="fas fa-building me-2"></i>Empresa
                         </h6>
                         <div class="row">
-                            <div class="col-4">
-                                <small class="text-muted d-block">Código:</small>
-                                <strong class="small">{{ movement.empresa_code or '-' }}</strong>
-                            </div>
                             <div class="col-8">
-                                <small class="text-muted d-block">Nome:</small>
-                                <strong class="small">{{ movement.empresa_nome or '-' }}</strong>
+                                <small class="text-muted d-block">Razão Social:</small>
+                                <strong class="small">{{ movement.customer_vendor_name or '-' }}</strong>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted d-block">ID da Empresa:</small>
+                                <strong class="small">{{ movement.company_id or '-' }}</strong>
                             </div>
                         </div>
-                        {% if movement.empresa_endereco %}
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <small class="text-muted d-block">Endereço:</small>
-                                <strong class="small">{{ movement.empresa_endereco }}</strong>
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -99,27 +91,21 @@
                             <i class="fas fa-map-marker-alt me-2"></i>Filial
                         </h6>
                         <div class="row">
-                            <div class="col-4">
-                                <small class="text-muted d-block">Código:</small>
-                                <strong class="small">{{ movement.filial_code or '-' }}</strong>
-                            </div>
                             <div class="col-8">
-                                <small class="text-muted d-block">Nome:</small>
+                                <small class="text-muted d-block">Nome da Filial:</small>
                                 <strong class="small">{{ movement.filial_nome or '-' }}</strong>
                             </div>
-                        </div>
-                        {% if movement.filial_endereco %}
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <small class="text-muted d-block">Endereço:</small>
-                                <strong class="small">{{ movement.filial_endereco }}</strong>
+                            <div class="col-4">
+                                <small class="text-muted d-block">ID da Filial:</small>
+                                <strong class="small">{{ movement.branch_id or '-' }}</strong>
                             </div>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
+
+
         
         {% if movement.observation %}
         <div class="mt-3">
@@ -130,25 +116,25 @@
     </div>
 </div>
 
-<!-- Financial Information -->
+<!-- Informações Financeiras -->
 <div class="row mb-4">
     <div class="col-md-6">
         <div class="card h-100">
             <div class="card-header">
                 <h6 class="mb-0">
-                    <i class="fas fa-dollar-sign me-2"></i>Financial Information
+                    <i class="fas fa-dollar-sign me-2"></i>Informações Financeiras
                 </h6>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <strong>Valor bruto:</strong>
+                        <strong>Valor Bruto:</strong>
                         <p class="h5 text-primary">
                             {{ movement.net_value_currency_code or 'R$' }} {{ "%.2f"|format(movement.gross_value or 0) }}
                         </p>
                     </div>
                     <div class="col-sm-6">
-                        <strong>Valor líquido:</strong>
+                        <strong>Valor Líquido:</strong>
                         <p class="h5 text-success">
                             {{ movement.net_value_currency_code or 'R$' }} {{ "%.2f"|format(movement.net_value or 0) }}
                         </p>
@@ -183,71 +169,173 @@
         <div class="card h-100">
             <div class="card-header">
                 <h6 class="mb-0">
-                    <i class="fas fa-building me-2"></i>Company Information
+                    <i class="fas fa-building me-2"></i>Informações da Empresa
                 </h6>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <strong>Company ID:</strong>
+                        <strong>ID da Empresa:</strong>
                         <p>{{ movement.company_id or '-' }}</p>
                     </div>
                     <div class="col-sm-6">
-                        <strong>Branch ID:</strong>
+                        <strong>ID da Filial:</strong>
                         <p>{{ movement.branch_id or '-' }}</p>
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-sm-6">
-                        <strong>Warehouse:</strong>
+                        <strong>Depósito:</strong>
                         <p>{{ movement.warehouse_code or '-' }}</p>
                     </div>
                     <div class="col-sm-6">
-                        <strong>Destiny Warehouse:</strong>
+                        <strong>Depósito de Destino:</strong>
                         <p>{{ movement.destiny_warehouse_code or '-' }}</p>
                     </div>
                 </div>
                 
                 <div class="row">
+                    
                     <div class="col-sm-6">
-                        <strong>Cost Center:</strong>
-                        <p>{{ movement.cost_center_code or '-' }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <strong>User Code:</strong>
+                        <strong>Código do Usuário:</strong>
                         <p>{{ movement.user_code or '-' }}</p>
                     </div>
                 </div>
+
+                {# --- INÍCIO: Rateio de Centros de Custo dentro de Informações da Empresa --- #}
+                {% set cost_center_apportionments = movement.get_json_field('cost_center_apportionments') %}
+                {% if cost_center_apportionments and cost_center_apportionments|length > 0 %}
+
+                <hr class="my-3">
+
+                <h6 class="mb-2">
+                <i class="fas fa-chart-pie me-2"></i>
+                Rateio de Centros de Custo
+                <span class="badge bg-secondary ms-2">{{ cost_center_apportionments|length }}</span>
+                </h6>
+
+                <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th>Código do Centro de Custo</th>
+                        <th>Nome do Centro de Custo</th>
+                        <th class="text-end">Valor</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in cost_center_apportionments %}
+                    <tr>
+                        <td><code class="text-info">{{ item.costCenterCode }}</code></td>
+                        <td>{{ item.costCenterName or '-' }}</td>
+                        <td class="text-end">
+                        <strong class="text-success">R$ {{ "%.2f"|format(item.value or item.amount or item.totalValue or 0) }}</strong>
+                        </td>
+                        <td class="text-center">
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#costCenterModal{{ loop.index }}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+
+                {# Modais podem ficar em qualquer lugar do DOM; incluir aqui para manter o botão funcionando #}
+                {% for item in cost_center_apportionments %}
+                <div class="modal fade" id="costCenterModal{{ loop.index }}" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-chart-pie me-2"></i> Detalhes do Rateio de Centro de Custo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                        <div class="col-md-12">
+                            <div class="card border-primary mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <small><i class="fas fa-info-circle me-1"></i>Informações Fiscais do Item</small>
+                            </div>
+                            <div class="card-body">
+                                <!-- (reaproveite aqui exatamente o conteúdo de campos do seu modal original) -->
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Natureza Orçamentária:</strong></div><div class="col-sm-6">{{ item.natureza_orcamentaria or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>NCM:</strong></div><div class="col-sm-6">{{ item.ncm or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Procedência:</strong></div><div class="col-sm-6">{{ item.procedencia or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Unidade de Medida:</strong></div><div class="col-sm-6">{{ item.measureUnitCode or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>CFOP de Entrada:</strong></div><div class="col-sm-6">{{ item.cfop_entrada or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>CST:</strong></div><div class="col-sm-6">{{ item.cst or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Tipo de Tributação:</strong></div><div class="col-sm-6">{{ item.tipo_tributacao or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Classificação Fiscal:</strong></div><div class="col-sm-6">{{ item.classificacao_fiscal or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Conta Contábil:</strong></div><div class="col-sm-6">{{ item.conta_contabil or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Centro de Custo:</strong></div><div class="col-sm-6">{{ item.costCenterCode or '-' }}</div></div>
+                                <hr>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Base de Cálculo ICMS:</strong></div><div class="col-sm-6">{{ item.base_calculo_icms or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Valor ICMS:</strong></div><div class="col-sm-6">{{ item.valor_icms or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Alíquota ICMS:</strong></div><div class="col-sm-6">{{ item.aliquota_icms or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Valor IPI:</strong></div><div class="col-sm-6">{{ item.valor_ipi or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>Alíquota IPI:</strong></div><div class="col-sm-6">{{ item.aliquota_ipi or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>ISS:</strong></div><div class="col-sm-6">{{ item.valor_iss or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>PIS:</strong></div><div class="col-sm-6">{{ item.valor_pis or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>COFINS:</strong></div><div class="col-sm-6">{{ item.valor_cofins or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>IR:</strong></div><div class="col-sm-6">{{ item.valor_ir or '-' }}</div></div>
+                                <div class="row mb-2"><div class="col-sm-6"><strong>CSLL:</strong></div><div class="col-sm-6">{{ item.valor_csll or '-' }}</div></div>
+
+                                {% if current_user.is_admin %}
+                                <hr>
+                                <div class="card border-secondary">
+                                <div class="card-header bg-secondary text-white"><small><i class="fas fa-code me-1"></i>Dados Brutos (Apenas Administradores)</small></div>
+                                <div class="card-body"><pre class="mb-0"><code>{{ item|tojson(indent=2) }}</code></pre></div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {# --- FIM: Rateio de Centros de Custo dentro de Informações da Empresa --- #}
+
             </div>
         </div>
     </div>
 </div>
 
-<!-- Customer/Vendor Information -->
+<!-- Informações do Cliente/Fornecedor -->
 <div class="card mb-4">
     <div class="card-header">
         <h6 class="mb-0">
-            <i class="fas fa-handshake me-2"></i>Customer/Vendor Information
+            <i class="fas fa-handshake me-2"></i>Informações do Cliente/Fornecedor
         </h6>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
-                <strong>Customer/Vendor Code:</strong>
+                <strong>Código do Cliente/Fornecedor:</strong>
                 <p>{{ movement.customer_vendor_code or movement.aux_customer_vendor_code or '-' }}</p>
             </div>
             <div class="col-md-4">
-                <strong>Payment Term:</strong>
+                <strong>Condição de Pagamento:</strong>
                 <p>{{ movement.payment_term_code or '-' }}</p>
             </div>
             <div class="col-md-4">
-                <strong>Salesman:</strong>
+                <strong>Vendedor:</strong>
                 <p>{{ movement.salesman1_code or '-' }}</p>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Dates -->
 <div class="card mb-4">
@@ -306,8 +394,9 @@
                             <span class="badge bg-primary">{{ item.sequentialNumber or item.sequentialId or loop.index }}</span>
                         </td>
                         <td>
-                            <strong class="text-primary">{{ item.productId or '-' }}</strong>
+                            <strong class="text-primary">{{ item.productCode or '-' }}</strong>
                         </td>
+
                         <td>
                             {{ item.description or '-' }}
                         </td>
@@ -339,11 +428,13 @@
                         </td>
                         <td>
                             {% if item.registerDate %}
-                            <small class="text-muted">{{ item.registerDate[:10] }}</small>
+                                {% set d = item.registerDate[:10].split('-') %}
+                                <small class="text-muted">{{ d[2] }}/{{ d[1] }}/{{ d[0] }}</small>
                             {% else %}
-                            -
+                                -
                             {% endif %}
                         </td>
+
                         <td>
                             <button class="btn btn-outline-primary btn-sm" 
                                     onclick="showItemDetails({{ loop.index0 }})" 
@@ -362,10 +453,9 @@
 
 <!-- JSON Data Sections -->
 {% set json_fields = [
-    ('payments', 'Payments', 'fas fa-credit-card'),
-    ('cost_center_apportionments', 'Cost Center Apportionments', 'fas fa-chart-pie'),
-    ('department_apportionments', 'Department Apportionments', 'fas fa-sitemap'),
-    ('taxes', 'Taxes', 'fas fa-percent')
+    ('payments', 'Pagamentos', 'fas fa-credit-card'),
+    ('department_apportionments', 'Rateio de Departamentos', 'fas fa-sitemap'),
+    ('taxes', 'Impostos', 'fas fa-percent')
 ] %}
 
 {% for field_name, title, icon in json_fields %}
@@ -387,17 +477,17 @@
                                 data-bs-target="#collapse{{ field_name }}{{ loop.index }}" aria-expanded="false">
                             {% if field_name == 'movement_items' %}
                                 {% if item is mapping %}
-                                    Item {{ loop.index }} - Product ID: {{ item.get('productId', 'N/A') }}
+                                    Item {{ loop.index }} - ID do Produto: {{ item.get('productId', 'N/A') }}
                                 {% else %}
                                     Item {{ loop.index }} - {{ item }}
                                 {% endif %}
                             {% elif field_name == 'payments' %}
-                                Payment {{ loop.index }}
+                                Pagamento {{ loop.index }}
                             {% elif field_name == 'taxes' %}
                                 {% if item is mapping %}
-                                    {{ item.get('taxId', 'Tax') }} - {{ "%.2f"|format(item.get('value', 0)) }}
+                                    {{ item.get('taxId', 'Imposto') }} - {{ "%.2f"|format(item.get('value', 0)) }}
                                 {% else %}
-                                    Tax {{ loop.index }} - {{ item }}
+                                    Imposto {{ loop.index }} - {{ item }}
                                 {% endif %}
                             {% else %}
                                 {{ title }} {{ loop.index }}
@@ -413,9 +503,12 @@
                                         {% if item is mapping %}
                                             {% for key, value in item.items() %}
                                             <tr>
-                                                <td><strong>{{ key }}:</strong></td>
+                                                <td><strong>{{ key|translate_field }}:</strong></td>
+
                                                 <td>
-                                                    {% if value is number %}
+                                                    {% if key == 'dueDate' and value %}
+                                                        {{ value[:10] | replace('-', '/') | datetimeformat('%d/%m/%Y') if false else value[:10].split('-')[2] ~ '/' ~ value[:10].split('-')[1] ~ '/' ~ value[:10].split('-')[0] }}
+                                                    {% elif value is number %}
                                                         {{ "%.2f"|format(value) if value % 1 else value|int }}
                                                     {% elif value is string and value|length > 50 %}
                                                         <span title="{{ value }}">{{ value[:50] }}...</span>
@@ -425,9 +518,10 @@
                                                 </td>
                                             </tr>
                                             {% endfor %}
+
                                         {% else %}
                                             <tr>
-                                                <td><strong>Value:</strong></td>
+                                                <td><strong>Valor:</strong></td>
                                                 <td>{{ item }}</td>
                                             </tr>
                                         {% endif %}
@@ -444,183 +538,8 @@
     {% endif %}
 {% endfor %}
 
-<!-- Cost Center Apportionments (Special Section) -->
-{% set cost_center_apportionments = movement.get_json_field('cost_center_apportionments') %}
-{% if cost_center_apportionments and cost_center_apportionments|length > 0 %}
-<div class="card mb-4">
-    <div class="card-header">
-        <h6 class="mb-0">
-            <i class="fas fa-chart-pie me-2"></i>
-            Cost Center Apportionments ({{ cost_center_apportionments|length }} {% if cost_center_apportionments|length == 1 %}item{% else %}items{% endif %})
-        </h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th>Cost Center Code</th>
-                        <th>Cost Center Name</th>
-                        <th class="text-end">Value</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in cost_center_apportionments %}
-                    <tr>
-                        <td>
-                            <code class="text-info">{{ item.costCenterCode }}</code>
-                        </td>
-                        <td>{{ item.costCenterName or '-' }}</td>
-                        <td class="text-end">
-                            <strong class="text-success">R$ {{ "%.2f"|format(item.value or item.amount or item.totalValue or 0) }}</strong>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-primary btn-sm" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#costCenterModal{{ loop.index }}">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
-<!-- Cost Center Apportionment Detail Modals -->
-{% for item in cost_center_apportionments %}
-<div class="modal fade" id="costCenterModal{{ loop.index }}" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Cost Center Apportionment Details
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card border-primary mb-3">
-                            <div class="card-header bg-primary text-white">
-                                <small><i class="fas fa-info-circle me-1"></i>Informações Fiscais do Item</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Natureza orçamentária:</strong></div>
-                                    <div class="col-sm-6">{{ item.natureza_orcamentaria or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>NCM:</strong></div>
-                                    <div class="col-sm-6">{{ item.ncm or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Procedência:</strong></div>
-                                    <div class="col-sm-6">{{ item.procedencia or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Unidade de medida:</strong></div>
-                                    <div class="col-sm-6">{{ item.measureUnitCode or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>CFOP de entrada:</strong></div>
-                                    <div class="col-sm-6">{{ item.cfop_entrada or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>CST:</strong></div>
-                                    <div class="col-sm-6">{{ item.cst or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Tipo de tributação:</strong></div>
-                                    <div class="col-sm-6">{{ item.tipo_tributacao or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Classificação fiscal:</strong></div>
-                                    <div class="col-sm-6">{{ item.classificacao_fiscal or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Conta contábil:</strong></div>
-                                    <div class="col-sm-6">{{ item.conta_contabil or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Centro de custo:</strong></div>
-                                    <div class="col-sm-6">{{ item.costCenterCode or '-' }}</div>
-                                </div>
-                                <hr>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Base de cálculo ICMS:</strong></div>
-                                    <div class="col-sm-6">{{ item.base_calculo_icms or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Valor ICMS:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_icms or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Alíquota ICMS:</strong></div>
-                                    <div class="col-sm-6">{{ item.aliquota_icms or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Valor IPI:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_ipi or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>Alíquota IPI:</strong></div>
-                                    <div class="col-sm-6">{{ item.aliquota_ipi or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>ISS:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_iss or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>PIS:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_pis or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>COFINS:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_cofins or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>IR:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_ir or '-' }}</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6"><strong>CSLL:</strong></div>
-                                    <div class="col-sm-6">{{ item.valor_csll or '-' }}</div>
-                                </div>
-                                <hr>
-                                <div class="alert alert-info mt-3">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    Para alterar/corrigir algum desses dados, acesse o RM e ajuste o cadastro do produto.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Raw JSON (Admin Only) -->
-                {% if current_user.is_admin %}
-                <div class="card border-secondary">
-                    <div class="card-header bg-secondary text-white">
-                        <small><i class="fas fa-code me-1"></i>Raw Data (Admin Only)</small>
-                    </div>
-                    <div class="card-body">
-                        <pre class="mb-0"><code>{{ item|tojson(indent=2) }}</code></pre>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-{% endfor %}
-{% endif %}
+
 
 <!-- Taxes (Special Section) -->
 {% set taxes = movement.get_json_field('taxes') %}
@@ -654,7 +573,7 @@
                             <span class="text-muted">R$ {{ "%.2f"|format(item.calculationBasis) }}</span>
                         </td>
                         <td class="text-end">
-                            <span class="text-warning">{{ "%.2f"|format(item.aliquot) }}%</span>
+                            <span class="text-warning">{{ "%.2f"|format(item.get('aliquot', 0)) }}%</span>
                         </td>
                         <td class="text-end">
                             <strong class="text-success">R$ {{ "%.2f"|format(item.value or item.amount or item.totalValue or 0) }}</strong>
@@ -733,7 +652,7 @@
                                 <div class="row mb-2">
                                     <div class="col-sm-7"><strong>Aliquot:</strong></div>
                                     <div class="col-sm-5 text-end">
-                                        <span class="text-warning">{{ "%.2f"|format(item.aliquot) }}%</span>
+                                        <span class="text-warning">{{ "%.2f"|format(item.get('aliquot', 0)) }}%</span>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
@@ -809,21 +728,21 @@
 <div class="card mb-4">
     <div class="card-header">
         <h6 class="mb-0">
-            <i class="fas fa-cogs me-2"></i>System Information
+            <i class="fas fa-cogs me-2"></i>Informações do Sistema
         </h6>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
-                <strong>Upload Batch:</strong>
+                <strong>Lote de Upload:</strong>
                 <p><code>{{ movement.upload_batch_id or '-' }}</code></p>
             </div>
             <div class="col-md-4">
-                <strong>Uploaded At:</strong>
-                <p>{{ movement.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') if movement.uploaded_at else '-' }}</p>
+                <strong>Enviado em:</strong>
+                <p>{{ movement.uploaded_at.strftime('%d/%m/%Y %H:%M:%S') if movement.uploaded_at else '-' }}</p>
             </div>
             <div class="col-md-4">
-                <strong>Created By:</strong>
+                <strong>Criado por:</strong>
                 <p>{{ movement.creation_user or '-' }}</p>
             </div>
         </div>
@@ -833,11 +752,11 @@
                 <strong>Flags:</strong>
                 <div class="mt-2">
                     {% set flags = [
-                        (movement.printed, 'Printed', 'primary'),
-                        (movement.document_printed, 'Document Printed', 'info'),
-                        (movement.bill_printed, 'Bill Printed', 'success'),
-                        (movement.has_generated_bill, 'Bill Generated', 'warning'),
-                        (movement.processed_flag, 'Processed', 'secondary')
+                        (movement.printed, 'Impresso', 'primary'),
+                        (movement.document_printed, 'Documento Impresso', 'info'),
+                        (movement.bill_printed, 'Boleto Impresso', 'success'),
+                        (movement.has_generated_bill, 'Boleto Gerado', 'warning'),
+                        (movement.processed_flag, 'Processado', 'secondary')
                     ] %}
                     
                     {% for flag_value, flag_name, color in flags %}
@@ -851,7 +770,6 @@
     </div>
 </div>
 
-<!-- Raw Data (Admin Only) -->
 {% if current_user.is_admin %}
 <div class="card">
     <div class="card-header">
@@ -859,7 +777,7 @@
                 data-bs-target="#rawData" aria-expanded="false">
             <h6 class="mb-0 d-flex justify-content-between align-items-center">
                 <span>
-                    <i class="fas fa-database me-2"></i>Raw Data (Admin Only)
+                    <i class="fas fa-database me-2"></i>Dados Brutos (Apenas Administradores)
                 </span>
                 <i class="fas fa-chevron-down"></i>
             </h6>
@@ -868,127 +786,120 @@
     <div class="collapse" id="rawData">
         <div class="card-body">
             <div class="row">
-                <!-- Core Information -->
                 <div class="col-md-6">
-                    <h6 class="text-primary mb-3"><i class="fas fa-info-circle me-1"></i> Core Information</h6>
+                    <h6 class="text-primary mb-3"><i class="fas fa-info-circle me-1"></i> Informações Principais</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Internal ID:</strong></td><td><code>{{ movement.internal_id or '-' }}</code></td></tr>
-                            <tr><td><strong>Movement ID:</strong></td><td>{{ movement.movement_id or '-' }}</td></tr>
-                            <tr><td><strong>Company ID:</strong></td><td>{{ movement.company_id or '-' }}</td></tr>
-                            <tr><td><strong>Branch ID:</strong></td><td>{{ movement.branch_id or '-' }}</td></tr>
-                            <tr><td><strong>Empresa Code:</strong></td><td><span class="badge bg-primary">{{ movement.empresa_code or '-' }}</span></td></tr>
-                            <tr><td><strong>Empresa Nome:</strong></td><td>{{ movement.empresa_nome or '-' }}</td></tr>
-                            <tr><td><strong>Filial Code:</strong></td><td><span class="badge bg-info">{{ movement.filial_code or '-' }}</span></td></tr>
-                            <tr><td><strong>Filial Nome:</strong></td><td>{{ movement.filial_nome or '-' }}</td></tr>
+                            <tr><td><strong>ID Interno:</strong></td><td><code>{{ movement.internal_id or '-' }}</code></td></tr>
+                            <tr><td><strong>ID do Movimento:</strong></td><td>{{ movement.movement_id or '-' }}</td></tr>
+                            <tr><td><strong>ID da Empresa:</strong></td><td>{{ movement.company_id or '-' }}</td></tr>
+                            <tr><td><strong>ID da Filial:</strong></td><td>{{ movement.branch_id or '-' }}</td></tr>
+                            <tr><td><strong>Código da Empresa:</strong></td><td><span class="badge bg-primary">{{ movement.empresa_code or '-' }}</span></td></tr>
+                            <tr><td><strong>Nome da Empresa:</strong></td><td>{{ movement.empresa_nome or '-' }}</td></tr>
+                            <tr><td><strong>Código da Filial:</strong></td><td><span class="badge bg-info">{{ movement.filial_code or '-' }}</span></td></tr>
+                            <tr><td><strong>Nome da Filial:</strong></td><td>{{ movement.filial_nome or '-' }}</td></tr>
                             <tr><td><strong>Status:</strong></td><td><span class="badge bg-info">{{ movement.status or '-' }}</span></td></tr>
-                            <tr><td><strong>Type:</strong></td><td><span class="badge bg-secondary">{{ movement.type or '-' }}</span></td></tr>
-                            <tr><td><strong>Movement Type:</strong></td><td><code>{{ movement.movement_type_code or '-' }}</code></td></tr>
-                            <tr><td><strong>Series:</strong></td><td>{{ movement.series or '-' }}</td></tr>
+                            <tr><td><strong>Tipo:</strong></td><td><span class="badge bg-secondary">{{ movement.type or '-' }}</span></td></tr>
+                            <tr><td><strong>Tipo de Movimento:</strong></td><td><code>{{ movement.movement_type_code or '-' }}</code></td></tr>
+                            <tr><td><strong>Série:</strong></td><td>{{ movement.series or '-' }}</td></tr>
                         </tbody>
                     </table>
                 </div>
                 
-                <!-- Financial Details -->
                 <div class="col-md-6">
-                    <h6 class="text-success mb-3"><i class="fas fa-money-bill-wave me-1"></i> Financial Details</h6>
+                    <h6 class="text-success mb-3"><i class="fas fa-money-bill-wave me-1"></i> Detalhes Financeiros</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Net Value:</strong></td><td><span class="text-success">{{ "R$ %.2f"|format(movement.net_value) if movement.net_value else '-' }}</span></td></tr>
-                            <tr><td><strong>Gross Value:</strong></td><td><span class="text-success">{{ "R$ %.2f"|format(movement.gross_value) if movement.gross_value else '-' }}</span></td></tr>
-                            <tr><td><strong>Other Values:</strong></td><td>{{ "R$ %.2f"|format(movement.other_values) if movement.other_values else '-' }}</td></tr>
-                            <tr><td><strong>Internal Gross:</strong></td><td>{{ "R$ %.2f"|format(movement.internal_gross_value) if movement.internal_gross_value else '-' }}</td></tr>
-                            <tr><td><strong>Merchandise Value:</strong></td><td>{{ "R$ %.2f"|format(movement.merchandise_value) if movement.merchandise_value else '-' }}</td></tr>
-                            <tr><td><strong>Currency:</strong></td><td>{{ movement.net_value_currency_code or '-' }}</td></tr>
-                            <tr><td><strong>Payment Term:</strong></td><td>{{ movement.payment_term_code or '-' }}</td></tr>
-                            <tr><td><strong>Cash Account:</strong></td><td>{{ movement.cash_account_code or '-' }}</td></tr>
+                            <tr><td><strong>Valor Líquido:</strong></td><td><span class="text-success">{{ "R$ %.2f"|format(movement.net_value) if movement.net_value else '-' }}</span></td></tr>
+                            <tr><td><strong>Valor Bruto:</strong></td><td><span class="text-success">{{ "R$ %.2f"|format(movement.gross_value) if movement.gross_value else '-' }}</span></td></tr>
+                            <tr><td><strong>Outros Valores:</strong></td><td>{{ "R$ %.2f"|format(movement.other_values) if movement.other_values else '-' }}</td></tr>
+                            <tr><td><strong>Bruto Interno:</strong></td><td>{{ "R$ %.2f"|format(movement.internal_gross_value) if movement.internal_gross_value else '-' }}</td></tr>
+                            <tr><td><strong>Valor da Mercadoria:</strong></td><td>{{ "R$ %.2f"|format(movement.merchandise_value) if movement.merchandise_value else '-' }}</td></tr>
+                            <tr><td><strong>Moeda:</strong></td><td>{{ movement.net_value_currency_code or '-' }}</td></tr>
+                            <tr><td><strong>Condição de Pagamento:</strong></td><td>{{ movement.payment_term_code or '-' }}</td></tr>
+                            <tr><td><strong>Conta Caixa:</strong></td><td>{{ movement.cash_account_code or '-' }}</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <div class="row mt-4">
-                <!-- Customer/Vendor Info -->
                 <div class="col-md-6">
-                    <h6 class="text-info mb-3"><i class="fas fa-user-tie me-1"></i> Customer/Vendor</h6>
+                    <h6 class="text-info mb-3"><i class="fas fa-user-tie me-1"></i> Cliente/Fornecedor</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Code:</strong></td><td><code>{{ movement.customer_vendor_code or '-' }}</code></td></tr>
-                            <tr><td><strong>Aux Code:</strong></td><td><code>{{ movement.aux_customer_vendor_code or '-' }}</code></td></tr>
-                            <tr><td><strong>Company ID:</strong></td><td>{{ movement.customer_vendor_company_id or '-' }}</td></tr>
-                            <tr><td><strong>Aux Company ID:</strong></td><td>{{ movement.aux_customer_vendor_company_id or '-' }}</td></tr>
+                            <tr><td><strong>Código:</strong></td><td><code>{{ movement.customer_vendor_code or '-' }}</code></td></tr>
+                            <tr><td><strong>Código Auxiliar:</strong></td><td><code>{{ movement.aux_customer_vendor_code or '-' }}</code></td></tr>
+                            <tr><td><strong>ID da Empresa:</strong></td><td>{{ movement.customer_vendor_company_id or '-' }}</td></tr>
+                            <tr><td><strong>ID Auxiliar da Empresa:</strong></td><td>{{ movement.aux_customer_vendor_company_id or '-' }}</td></tr>
                         </tbody>
                     </table>
                 </div>
                 
-                <!-- Warehouse & Operations -->
                 <div class="col-md-6">
-                    <h6 class="text-warning mb-3"><i class="fas fa-warehouse me-1"></i> Warehouse & Operations</h6>
+                    <h6 class="text-warning mb-3"><i class="fas fa-warehouse me-1"></i> Armazém e Operações</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Warehouse:</strong></td><td>{{ movement.warehouse_code or '-' }}</td></tr>
-                            <tr><td><strong>Destiny Warehouse:</strong></td><td>{{ movement.destiny_warehouse_code or '-' }}</td></tr>
-                            <tr><td><strong>Destiny Branch:</strong></td><td>{{ movement.destiny_branch_id or '-' }}</td></tr>
-                            <tr><td><strong>Operation ID:</strong></td><td>{{ movement.operation_id or '-' }}</td></tr>
-                            <tr><td><strong>Cost Center:</strong></td><td>{{ movement.cost_center_code or '-' }}</td></tr>
+                            <tr><td><strong>Depósito:</strong></td><td>{{ movement.warehouse_code or '-' }}</td></tr>
+                            <tr><td><strong>Depósito de Destino:</strong></td><td>{{ movement.destiny_warehouse_code or '-' }}</td></tr>
+                            <tr><td><strong>Filial de Destino:</strong></td><td>{{ movement.destiny_branch_id or '-' }}</td></tr>
+                            <tr><td><strong>ID da Operação:</strong></td><td>{{ movement.operation_id or '-' }}</td></tr>
+                            <tr><td><strong>Centro de Custo:</strong></td><td>{{ movement.cost_center_code or '-' }}</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <div class="row mt-4">
-                <!-- Dates & Users -->
                 <div class="col-md-6">
-                    <h6 class="text-secondary mb-3"><i class="fas fa-calendar-alt me-1"></i> Dates & Users</h6>
+                    <h6 class="text-secondary mb-3"><i class="fas fa-calendar-alt me-1"></i> Datas e Usuários</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Creation Date:</strong></td><td>{{ movement.creation_date.strftime('%Y-%m-%d %H:%M') if movement.creation_date else '-' }}</td></tr>
-                            <tr><td><strong>Register Date:</strong></td><td>{{ movement.register_date.strftime('%Y-%m-%d %H:%M') if movement.register_date else '-' }}</td></tr>
-                            <tr><td><strong>Entry Date:</strong></td><td>{{ movement.entry_date.strftime('%Y-%m-%d %H:%M') if movement.entry_date else '-' }}</td></tr>
-                            <tr><td><strong>Exit Date:</strong></td><td>{{ movement.exit_date.strftime('%Y-%m-%d %H:%M') if movement.exit_date else '-' }}</td></tr>
-                            <tr><td><strong>Delivery Date:</strong></td><td>{{ movement.delivery_date.strftime('%Y-%m-%d') if movement.delivery_date else '-' }}</td></tr>
-                            <tr><td><strong>Last Edit:</strong></td><td>{{ movement.last_edit_time.strftime('%Y-%m-%d %H:%M:%S') if movement.last_edit_time else '-' }}</td></tr>
-                            <tr><td><strong>Creation User:</strong></td><td><span class="badge bg-dark">{{ movement.creation_user or '-' }}</span></td></tr>
-                            <tr><td><strong>User Code:</strong></td><td><span class="badge bg-dark">{{ movement.user_code or '-' }}</span></td></tr>
+                            <tr><td><strong>Data de Criação:</strong></td><td>{{ movement.creation_date.strftime('%d/%m/%Y %H:%M') if movement.creation_date else '-' }}</td></tr>
+                            <tr><td><strong>Data de Registro:</strong></td><td>{{ movement.register_date.strftime('%d/%m/%Y %H:%M') if movement.register_date else '-' }}</td></tr>
+                            <tr><td><strong>Data de Entrada:</strong></td><td>{{ movement.entry_date.strftime('%d/%m/%Y %H:%M') if movement.entry_date else '-' }}</td></tr>
+                            <tr><td><strong>Data de Saída:</strong></td><td>{{ movement.exit_date.strftime('%d/%m/%Y %H:%M') if movement.exit_date else '-' }}</td></tr>
+                            <tr><td><strong>Data de Entrega:</strong></td><td>{{ movement.delivery_date.strftime('%d/%m/%Y') if movement.delivery_date else '-' }}</td></tr>
+                            <tr><td><strong>Última Edição:</strong></td><td>{{ movement.last_edit_time.strftime('%d/%m/%Y %H:%M:%S') if movement.last_edit_time else '-' }}</td></tr>
+                            <tr><td><strong>Usuário de Criação:</strong></td><td><span class="badge bg-dark">{{ movement.creation_user or '-' }}</span></td></tr>
+                            <tr><td><strong>Código do Usuário:</strong></td><td><span class="badge bg-dark">{{ movement.user_code or '-' }}</span></td></tr>
                         </tbody>
                     </table>
                 </div>
                 
-                <!-- Percentages & Charges -->
                 <div class="col-md-6">
-                    <h6 class="text-danger mb-3"><i class="fas fa-percentage me-1"></i> Percentages & Charges</h6>
+                    <h6 class="text-danger mb-3"><i class="fas fa-percentage me-1"></i> Percentuais e Encargos</h6>
                     <table class="table table-sm table-hover">
                         <tbody>
-                            <tr><td><strong>Discount %:</strong></td><td>{{ "%.2f%%"|format(movement.discount_percentage) if movement.discount_percentage else '0.00%' }}</td></tr>
-                            <tr><td><strong>Expense %:</strong></td><td>{{ "%.2f%%"|format(movement.expense_percentage) if movement.expense_percentage else '0.00%' }}</td></tr>
-                            <tr><td><strong>Charge %:</strong></td><td>{{ "%.2f%%"|format(movement.charge_percentage) if movement.charge_percentage else '0.00%' }}</td></tr>
+                            <tr><td><strong>Desconto %:</strong></td><td>{{ "%.2f%%"|format(movement.discount_percentage) if movement.discount_percentage else '0.00%' }}</td></tr>
+                            <tr><td><strong>Despesa %:</strong></td><td>{{ "%.2f%%"|format(movement.expense_percentage) if movement.expense_percentage else '0.00%' }}</td></tr>
+                            <tr><td><strong>Encargo %:</strong></td><td>{{ "%.2f%%"|format(movement.charge_percentage) if movement.charge_percentage else '0.00%' }}</td></tr>
                             <tr><td><strong>Extra % 1:</strong></td><td>{{ "%.2f%%"|format(movement.extra_percentage1) if movement.extra_percentage1 else '0.00%' }}</td></tr>
                             <tr><td><strong>Extra % 2:</strong></td><td>{{ "%.2f%%"|format(movement.extra_percentage2) if movement.extra_percentage2 else '0.00%' }}</td></tr>
-                            <tr><td><strong>Commercial Rep %:</strong></td><td>{{ "%.2f%%"|format(movement.commercial_representative_charge) if movement.commercial_representative_charge else '0.00%' }}</td></tr>
-                            <tr><td><strong>Salesman2 %:</strong></td><td>{{ "%.2f%%"|format(movement.salesman2_charge_percentage) if movement.salesman2_charge_percentage else '0.00%' }}</td></tr>
-                            <tr><td><strong>Salesman3 %:</strong></td><td>{{ "%.2f%%"|format(movement.salesman3_charge_percentage) if movement.salesman3_charge_percentage else '0.00%' }}</td></tr>
+                            <tr><td><strong>Representante Comercial %:</strong></td><td>{{ "%.2f%%"|format(movement.commercial_representative_charge) if movement.commercial_representative_charge else '0.00%' }}</td></tr>
+                            <tr><td><strong>Vendedor 2 %:</strong></td><td>{{ "%.2f%%"|format(movement.salesman2_charge_percentage) if movement.salesman2_charge_percentage else '0.00%' }}</td></tr>
+                            <tr><td><strong>Vendedor 3 %:</strong></td><td>{{ "%.2f%%"|format(movement.salesman3_charge_percentage) if movement.salesman3_charge_percentage else '0.00%' }}</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <div class="row mt-4">
-                <!-- Status Flags -->
                 <div class="col-12">
-                    <h6 class="text-primary mb-3"><i class="fas fa-flag me-1"></i> Status Flags</h6>
+                    <h6 class="text-primary mb-3"><i class="fas fa-flag me-1"></i> Status e Flags</h6>
                     <div class="d-flex flex-wrap gap-2">
                         {% set all_flags = [
-                            (movement.printed, 'Printed', 'primary'),
-                            (movement.document_printed, 'Document Printed', 'info'),
-                            (movement.bill_printed, 'Bill Printed', 'success'),
-                            (movement.has_generated_bill, 'Bill Generated', 'warning'),
-                            (movement.processed_flag, 'Processed', 'secondary'),
-                            (movement.bonum_integrated, 'Bonum Integrated', 'dark'),
-                            (movement.paradigma_auto_integrated, 'Paradigma Auto Integrated', 'primary'),
-                            (movement.fluxus_grouped_flag, 'Fluxus Grouped', 'info'),
-                            (movement.lot_generated, 'Lot Generated', 'success'),
-                            (movement.has_generated_work_account, 'Work Account Generated', 'warning'),
-                            (movement.uses_financial_value_apportionment, 'Financial Apportionment', 'secondary')
+                            (movement.printed, 'Impresso', 'primary'),
+                            (movement.document_printed, 'Documento Impresso', 'info'),
+                            (movement.bill_printed, 'Boleto Impresso', 'success'),
+                            (movement.has_generated_bill, 'Boleto Gerado', 'warning'),
+                            (movement.processed_flag, 'Processado', 'secondary'),
+                            (movement.bonum_integrated, 'Integrado Bonum', 'dark'),
+                            (movement.paradigma_auto_integrated, 'Auto Integrado Paradigma', 'primary'),
+                            (movement.fluxus_grouped_flag, 'Agrupado Fluxus', 'info'),
+                            (movement.lot_generated, 'Lote Gerado', 'success'),
+                            (movement.has_generated_work_account, 'Conta de Trabalho Gerada', 'warning'),
+                            (movement.uses_financial_value_apportionment, 'Rateio Financeiro', 'secondary')
                         ] %}
                         
                         {% for flag_value, flag_name, color in all_flags %}
@@ -1002,22 +913,21 @@
                 </div>
             </div>
             
-            <!-- Upload Information -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <h6 class="text-success mb-3"><i class="fas fa-upload me-1"></i> Upload Information</h6>
+                    <h6 class="text-success mb-3"><i class="fas fa-upload me-1"></i> Informações de Upload</h6>
                     <div class="alert alert-success">
                         <div class="row">
                             <div class="col-md-4">
-                                <strong>Batch ID:</strong><br>
+                                <strong>ID do Lote:</strong><br>
                                 <code>{{ movement.upload_batch_id or '-' }}</code>
                             </div>
                             <div class="col-md-4">
-                                <strong>Uploaded At:</strong><br>
-                                {{ movement.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') if movement.uploaded_at else '-' }}
+                                <strong>Enviado em:</strong><br>
+                                {{ movement.uploaded_at.strftime('%d/%m/%Y %H:%M:%S') if movement.uploaded_at else '-' }}
                             </div>
                             <div class="col-md-4">
-                                <strong>Uploaded By User ID:</strong><br>
+                                <strong>ID do Usuário que Enviou:</strong><br>
                                 {{ movement.uploaded_by or '-' }}
                             </div>
                         </div>
@@ -1028,6 +938,7 @@
     </div>
 </div>
 {% endif %}
+
 
 <!-- Movement Item Details Modal -->
 <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
@@ -1070,7 +981,7 @@ function showItemDetails(itemIndex) {
     let detailsHtml = `
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h6 class="mb-0">Item ${item.sequentialNumber || item.sequentialId || (itemIndex + 1)} - Product ${item.productId || 'N/A'}</h6>
+                <h6 class="mb-0">Item ${item.sequentialNumber || item.sequentialId || (itemIndex + 1)} - Código do Produto: ${item.productId || 'N/A'}</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -1079,55 +990,57 @@ function showItemDetails(itemIndex) {
     // Key-value pairs organized in sections
     const sections = [
         {
-            title: 'Basic Information',
+            title: 'Informações Básicas',
             icon: 'fas fa-info-circle',
             color: 'primary',
             fields: [
-                ['Company ID', item.companyId],
-                ['Movement ID', item.movementId],
-                ['Sequential ID', item.sequentialId],
-                ['Sequential Number', item.sequentialNumber],
-                ['Product ID', item.productId],
-                ['Measure Unit', item.measureUnitCode]
+                ['ID da Empresa', item.companyId],
+                ['ID do Movimento', item.movementId],
+                ['ID Sequencial', item.sequentialId],
+                ['Número Sequencial', item.sequentialNumber],
+                ['Código do Produto', item.productId],
+                ['Código Reduzido', item.productCode],
+                ['Unidade de Medida', item.measureUnitCode]
             ]
         },
         {
-            title: 'Quantities & Pricing',
+            title: 'Quantidades e Valores',
             icon: 'fas fa-calculator',
             color: 'success',
             fields: [
-                ['Quantity', item.quantity],
-                ['Unit Price', item.unitPrice ? 'R$ ' + parseFloat(item.unitPrice).toFixed(2) : null],
-                ['Table Price', item.tablePrice ? 'R$ ' + parseFloat(item.tablePrice).toFixed(2) : null],
-                ['Discount Value', item.discountValue ? 'R$ ' + parseFloat(item.discountValue).toFixed(2) : null],
-                ['Unit Value', item.unitValue ? 'R$ ' + parseFloat(item.unitValue).toFixed(2) : null],
-                ['Financial Value', item.financialValue ? 'R$ ' + parseFloat(item.financialValue).toFixed(2) : null],
-                ['Receivable Quantity', item.receivableQuantity],
-                ['Original Quantity', item.originalQuantity]
+                ['Quantidade', item.quantity],
+                ['Preço Unitário', item.unitPrice ? 'R$ ' + parseFloat(item.unitPrice).toFixed(2) : null],
+                ['Preço de Tabela', item.tablePrice ? 'R$ ' + parseFloat(item.tablePrice).toFixed(2) : null],
+                ['Valor de Desconto', item.discountValue ? 'R$ ' + parseFloat(item.discountValue).toFixed(2) : null],
+                ['Valor Unitário', item.unitValue ? 'R$ ' + parseFloat(item.unitValue).toFixed(2) : null],
+                ['Valor Financeiro', item.financialValue ? 'R$ ' + parseFloat(item.financialValue).toFixed(2) : null],
+                ['Quantidade a Receber', item.receivableQuantity],
+                ['Quantidade Original', item.originalQuantity]
             ]
         },
         {
-            title: 'Dates',
+            title: 'Datas',
             icon: 'fas fa-calendar',
             color: 'info',
             fields: [
-                ['Register Date', item.registerDate ? new Date(item.registerDate).toLocaleDateString() : null],
-                ['Delivery Date', item.deliveryDate ? new Date(item.deliveryDate).toLocaleDateString() : null]
+                ['Data de Registro', item.registerDate ? new Date(item.registerDate).toLocaleDateString('pt-BR') : null],
+                ['Data de Entrega', item.deliveryDate ? new Date(item.deliveryDate).toLocaleDateString('pt-BR') : null]
             ]
         },
         {
-            title: 'Classification & Codes',
+            title: 'Classificações e Códigos',
             icon: 'fas fa-tags',
             color: 'warning',
             fields: [
-                ['Classification Table 5', item.classificationTable5Code],
-                ['Financial Optional Table 2', item.financialOptionalTable2Code],
-                ['Stock Effect Flag', item.stockEffectFlag],
+                ['Tabela de Classificação 5', item.classificationTable5Code],
+                ['Tabela Financeira Opcional 2', item.financialOptionalTable2Code],
+                ['Flag de Efeito de Estoque', item.stockEffectFlag],
                 ['Flag', item.flag],
-                ['Block Object', item.blockObject]
+                ['Objeto de Bloqueio', item.blockObject]
             ]
         }
     ];
+
     
     sections.forEach(section => {
         detailsHtml += `
@@ -1162,12 +1075,15 @@ function showItemDetails(itemIndex) {
     });
     
     // Add other fields section for any remaining fields
-    const displayedFields = new Set(['companyid', 'movementid', 'sequentialid', 'sequentialnumber', 'productid', 
-      'quantity', 'unitprice', 'tableprice', 'discountvalue', 'registerdate',
-      'deliverydate', 'classificationtable5code', 'financialoptionaltable2code',
-      'measureunitcode', 'receivablequantity', 'partialbillingreceivedvalue',
-      'completedvalue', 'stockeffectflag', 'unitvalue', 'financialvalue',
-      'ordinationtaxaliquot', 'originalquantity', 'flag', 'blockobject']);
+    const displayedFields = new Set([
+    'companyid', 'movementid', 'sequentialid', 'sequentialnumber', 'productcode',
+    'quantity', 'unitprice', 'tableprice', 'discountvalue', 'registerdate',
+    'deliverydate', 'classificationtable5code', 'financialoptionaltable2code',
+    'measureunitcode', 'receivablequantity', 'partialbillingreceivedvalue',
+    'completedvalue', 'stockeffectflag', 'unitvalue', 'financialvalue',
+    'ordinationtaxaliquot', 'originalquantity', 'flag', 'blockobject'
+    ]);
+
     
     const otherFields = [];
     Object.keys(item).forEach(key => {

@@ -269,47 +269,109 @@ def list_companies() -> List[Dict[str, str]]:
             break
     return out
 
+
+
 # ==============================
 # MOVEMENTS
 # ==============================
-def _get_movements_page(page: int, page_size: int, odata_filter: Optional[str], select_fields: List[str]):
-    url = f"{HOST}{MOV_ENDPOINT}"
-    params = {"page": max(1,page), "pageSize": max(1,page_size)}
-    if odata_filter: params["$filter"] = odata_filter
-    if select_fields: params["$select"] = ",".join(select_fields)
-        # 🔹 Filtro adicional por movimento específico, se definido via variável de ambiente
-      
-    if getattr(args, "movimento", None):
-        mov_filtro = f"movementTypeCode eq '{args.movimento}'"
-        if "$filter" in params:
-            params["$filter"] += f" and {mov_filtro}"
-        else:
-            params["$filter"] = mov_filtro
-        if DEBUG_VERBOSE:
-            print(f"      🔎 Aplicando filtro adicional: {mov_filtro}")
 
 
+def get_customer_vendor_info(code: str, company_id: str) -> Optional[Dict[str, Any]]:
+    if not code:
+        return None
+
+    url = f"{HOST}/api/fin/v1/CustomerVendor"
+    params = {
+        "$filter": f"code eq '{code}' and companyId eq {company_id}",
+        "$select": "code,shortName,name,mainNIF"
+    }
 
     r, exc, _ = _safe_request("GET", url, params=params)
+    if not r or r.status_code != 200:
+        return None
+
+    j = r.json()
+    items = j.get("items", [])
+    if items:
+        return items[0]
+
+    # 🔄 fallback: tenta sem companyId
+    params["$filter"] = f"code eq '{code}'"
+    r, exc, _ = _safe_request("GET", url, params=params)
+    if not r or r.status_code != 200:
+        return None
+
+    j = r.json()
+    return (j.get("items") or [None])[0]
+
+
+def _get_movements_page(page: int, page_size: int, odata_filter: Optional[str], select_fields: List[str]):
+    """
+    Executa a chamada à API /movements, garantindo que o filtro de empresa/filial e de movimentos
+    seja combinado corretamente sem ser sobrescrito.
+    """
+    url = f"{HOST}{MOV_ENDPOINT}"
+    params = {
+        "page": max(1, page),
+        "pageSize": max(1, page_size)
+    }
+
+    # Filtro base (empresa + filial)
+    base_filter = odata_filter or ""
+
+    # Filtro adicional de movimento
+    if getattr(args, "movimento", None):
+        movimentos = [m.strip() for m in args.movimento.split(",") if m.strip()]
+        if len(movimentos) == 1:
+            mov_filtro = f"movementTypeCode eq '{movimentos[0]}'"
+        else:
+            clauses = [f"movementTypeCode eq '{m}'" for m in movimentos]
+            mov_filtro = " or ".join(clauses)
+
+        # ✅ Garante que o filtro de movimento é somado, não sobrescrito
+        if base_filter:
+            base_filter = f"({base_filter}) and ({mov_filtro})"
+        else:
+            base_filter = mov_filtro
+
+    # Aplica filtro final
+    if base_filter:
+        params["$filter"] = base_filter
+
+    # Campos selecionados
+    if select_fields:
+        params["$select"] = ",".join(select_fields)
+
+    if DEBUG_VERBOSE:
+        print(f"DEBUG: chamando GET {url}")
+        print(f"       params = {json.dumps(params, indent=2, ensure_ascii=False)}")
+
+    # Execução HTTP
+    r, exc, _ = _safe_request("GET", url, params=params)
     meta = {"status": r.status_code if r else -1}
+
     if not r:
         return [], -1, meta
+
     if 200 <= r.status_code < 300 or r.status_code == 206:
         try:
             j = r.json()
         except Exception:
             return [], r.status_code, meta
+
+        # Normaliza retorno
         if isinstance(j, dict):
             data = j.get("items") or j.get("Items")
-            if isinstance(data, list): items = data
-            elif isinstance(j, list): items = j
-            else: items = [j]
+            items = data if isinstance(data, list) else ([j] if not isinstance(j, list) else [])
         elif isinstance(j, list):
             items = j
         else:
             items = []
+
         return items, r.status_code, meta
+
     return [], r.status_code, meta
+
 
 def _try_date_filter_server_side(company_field: Optional[str], branch_field: Optional[str],
                                  comp_code: str, branch_code: str,
@@ -381,8 +443,11 @@ def extract_branch_items(comp_norm: str, b_code: str,
                 except Exception:
                     pass
         return False
+    global_limit = getattr(args, "limit", 0)
 
-    while page <= min(MAX_LIST_PAGES, MAX_PAGES_PER_BRANCH):
+    max_pages = getattr(args, "max_pages", 1)
+    while page <= min(max_pages, MAX_PAGES_PER_BRANCH):
+
         if deadline_sec and (_now() - started_at > deadline_sec):
             print(f"      ⏱️ Tempo excedido ({deadline_sec}s) — encerrando filial com {len(out)} itens.")
             break
@@ -438,6 +503,11 @@ def extract_branch_items(comp_norm: str, b_code: str,
 
         out.extend(items)
         print(f"    · Página {page}: {len(items)} itens (acum={len(out)}) | ps={page_size}")
+        if global_limit and len(out) >= global_limit:
+            print(f"      ⏹️ Limite global de {global_limit} registros atingido — encerrando coleta desta filial.")
+            out = out[:global_limit]
+            break
+
 
         if len(items) < page_size:
             print("      ↳ Última página (len(items) < pageSize).")
@@ -460,7 +530,8 @@ def run_extract(args):
 
     # empresas alvo
     if args.empresa:
-        target_companies = [_norm_code(args.empresa)]
+        target_companies = [_norm_code(x) for x in args.empresa.split(",")]
+
         print(f"🏭 Empresa informada por parâmetro: {target_companies[0]}")
         companies_meta = []
     else:
@@ -566,6 +637,30 @@ def run_extract(args):
         return
 
     df = json_normalize(all_rows, sep=".")
+    # ============================================
+    # 🔍 Enriquecimento: busca CNPJ e Razão Social
+    # ============================================
+    print("🔍 Enriquecendo com CNPJ e Razão Social...")
+
+    if "customerVendorCode" in df.columns and "companyId" in df.columns:
+        unique_pairs = df[["customerVendorCode", "companyId"]].dropna().drop_duplicates()
+        lookup = {}
+
+        for _, row in unique_pairs.iterrows():
+            code = str(row["customerVendorCode"]).strip()
+            comp = str(row["companyId"]).strip()
+            info = get_customer_vendor_info(code, comp)
+            if info:
+                lookup[(code, comp)] = {
+                    "cnpj": info.get("mainNIF"),
+                    "razao_social": info.get("shortName") or info.get("name")
+                }
+
+        df["cnpj"] = df.apply(lambda r: lookup.get((str(r["customerVendorCode"]), str(r["companyId"])), {}).get("cnpj"), axis=1)
+        df["razao_social"] = df.apply(lambda r: lookup.get((str(r["customerVendorCode"]), str(r["companyId"])), {}).get("razao_social"), axis=1)
+    else:
+        print("⚠️ Campos customerVendorCode ou companyId não encontrados; não foi possível enriquecer.")
+
     df = _coerce_datetime_cols(df)
     df = _strip_timezone_for_excel(df)
 
@@ -687,7 +782,8 @@ def parse_args():
     ap = argparse.ArgumentParser(description="Extrai Movements e gera XLSX em árvore + dados completos (rápido & estável).")
     ap.add_argument("--inicio",   required=True, help="Data inicial (YYYY-MM-DD).")
     ap.add_argument("--fim",      required=True, help="Data final (YYYY-MM-DD).")
-    ap.add_argument("--empresa",  required=False, help="companyId (coligada), ex.: 4")
+    ap.add_argument("--empresa", required=False, help="IDs de empresas separados por vírgula, ex.: 4,147,148,149")
+
     ap.add_argument("--filial",   required=False, help="branchId (filial), ex.: 17")
     ap.add_argument("--ordenar",  required=False, default="date,internalId", help="Colunas para ordenar (vírgula).")
     ap.add_argument("--colunas",  required=False, default="", help="Colunas para mostrar na aba Árvore (vírgula).")
@@ -702,7 +798,11 @@ def parse_args():
     # $select (string vazia desliga)
     ap.add_argument("--select-fields", type=str, default=",".join(DEFAULT_SELECT_FIELDS),
                     help='Campos em $select (ex.: "date,internalId,movementId,companyId,branchId"). Use "" para desativar.')
-    ap.add_argument("--movimento", required=False, help="Filtra um movementId específico (ex.: 1.2.01).")
+    ap.add_argument("--movimento", required=False, help="Lista de códigos de movementTypeCode separados por vírgula, ex.: 1.2.01,1.2.09,1.2.10.")
+    ap.add_argument("--limit", type=int, default=0, help="Limite máximo de registros a coletar (0 = sem limite).")
+    ap.add_argument("--max-pages", type=int, default=1, help="Número máximo de páginas a buscar por filial (padrão=1).")
+
+
 
     return ap.parse_args()
 

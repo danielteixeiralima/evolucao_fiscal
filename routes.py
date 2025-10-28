@@ -53,19 +53,22 @@ def movements():
     branch_filter = request.args.get('branch', '', type=str)
     status_filter = request.args.get('status', '', type=str)
     per_page = 25
-    
     query = FinancialMovement.query
     
     # Apply search filter
     if search:
-        query = query.filter(
-            or_(
-                FinancialMovement.internal_id.contains(search),
-                FinancialMovement.number.contains(search),
-                FinancialMovement.aux_customer_vendor_code.contains(search),
-                FinancialMovement.observation.contains(search)
+    # tenta converter para número se possível
+        if search.isdigit():
+            query = query.filter(FinancialMovement.number == int(search))
+        else:
+            query = query.filter(
+                or_(
+                    FinancialMovement.internal_id.ilike(f"%{search}%"),
+                    FinancialMovement.aux_customer_vendor_code.ilike(f"%{search}%"),
+                    FinancialMovement.observation.ilike(f"%{search}%")
+                )
             )
-        )
+
     
     # Apply company filter
     if company_filter:
@@ -108,6 +111,7 @@ def movements():
                          companies=companies,
                          branches=branches,
                          statuses=statuses)
+
 
 @main_bp.route('/movements/<int:id>')
 @login_required

@@ -55,6 +55,13 @@ class FinancialDataProcessor:
         'date': 'date',
         'hasGeneratedBill': 'has_generated_bill',
         'auxCustomerVendorCode': 'aux_customer_vendor_code',
+        'customerVendorName': 'customer_vendor_name',
+        'customerVendorCNPJ': 'customer_vendor_cnpj',
+        'cnpj': 'customer_vendor_cnpj',
+        'razao_social': 'customer_vendor_name',
+        'auxCustomerVendorCompanyId': 'aux_customer_vendor_company_id',
+        'customerVendorName': 'customer_vendor_name',
+        'customerVendorCNPJ': 'customer_vendor_cnpj',
         'auxCustomerVendorCompanyId': 'aux_customer_vendor_company_id',
         'costCenterCode': 'cost_center_code',
         'salesman1Code': 'salesman1_code',
@@ -300,7 +307,19 @@ class FinancialDataProcessor:
                     processed[db_col] = False
                 else:
                     processed[db_col] = None
-                
+        # --- Complementa campos de cliente/fornecedor se vierem com nomes alternativos ---
+        if not processed.get('customer_vendor_name'):
+            for alt_col in ['CustomerVendorName', 'Cliente', 'Fornecedor', 'RazaoSocial']:
+                if alt_col in row.index and not pd.isna(row[alt_col]):
+                    processed['customer_vendor_name'] = str(row[alt_col]).strip()
+                    break
+
+        if not processed.get('customer_vendor_cnpj'):
+            for alt_col in ['CustomerVendorCNPJ', 'CNPJ', 'CPF', 'Documento']:
+                if alt_col in row.index and not pd.isna(row[alt_col]):
+                    processed['customer_vendor_cnpj'] = self._format_cnpj(str(row[alt_col]).strip())
+                    break
+
         return processed
 
     def _process_json_field(self, value: Any) -> str:
