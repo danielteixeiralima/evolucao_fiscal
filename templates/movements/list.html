@@ -17,72 +17,60 @@
             <i class="fas fa-filter me-2"></i>Search & Filters
         </h6>
     </div>
-    <div class="card-body">
-        <form method="GET" class="row g-3">
-            <div class="col-md-4">
-                <label for="search" class="form-label">Buscar movimentos</label>
-                <input type="text" class="form-control" id="search" name="search"
-                    value="{{ search }}"
-                    placeholder="Buscar pelo número do movimento...">
+    <div class="card-body"><form method="GET" class="row g-3">
+  <div class="col-md-6">
+    <label for="search" class="form-label fw-bold">
+      <i class="fas fa-search me-2 text-primary"></i>Buscar movimento
+    </label>
+    <input
+      type="text"
+      class="form-control"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Digite para filtrar os movimentos..."
+    />
+    <div
+      id="searchResults"
+      class="list-group position-absolute w-100"
+      style="z-index:1000; max-height:300px; overflow:auto; display:none;"
+    ></div>
+  </div>
 
-            </div>
-            <div class="col-md-2">
-                <label for="start_date" class="form-label">Período inicial</label>
-                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
-            </div>
-            <div class="col-md-2">
-                <label for="end_date" class="form-label">Período final</label>
-                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
-            </div>
-            <div class="col-md-3">
-                <label for="company" class="form-label">Company</label>
-                <select class="form-select" id="company" name="company">
-                    <option value="">All Companies</option>
-                    {% for company in companies %}
-                    <option value="{{ company }}" {% if company_filter == company %}selected{% endif %}>
-                        {{ company }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="branch" class="form-label">Branch</label>
-                <select class="form-select" id="branch" name="branch">
-                    <option value="">All Branches</option>
-                    {% for branch in branches %}
-                    <option value="{{ branch }}" {% if branch_filter == branch %}selected{% endif %}>
-                        {{ branch }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="">All Statuses</option>
-                    {% for status in statuses %}
-                    <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>
-                        {% if status == 'F' %}Finalized
-                        {% elif status == 'N' %}New
-                        {% elif status == 'P' %}Processing
-                        {% else %}{{ status }}
-                        {% endif %}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6 d-flex align-items-end">
-                <div class="btn-group w-100" role="group">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search me-2"></i>Apply Filters
-                    </button>
-                    <a href="{{ url_for('main.movements') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-times me-2"></i>Clear All
-                    </a>
-                </div>
-            </div>
-        </form>
+  <div class="col-md-3">
+    <label for="start_date" class="form-label">Período inicial</label>
+    <input
+      type="date"
+      class="form-control"
+      id="start_date"
+      name="start_date"
+      value="{{ start_date }}"
+    />
+  </div>
+
+  <div class="col-md-3">
+    <label for="end_date" class="form-label">Período final</label>
+    <input
+      type="date"
+      class="form-control"
+      id="end_date"
+      name="end_date"
+      value="{{ end_date }}"
+    />
+  </div>
+
+  <div class="col-md-12 d-flex align-items-end">
+    <div class="btn-group w-100" role="group">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search me-2"></i>Aplicar filtros
+      </button>
+      <a href="{{ url_for('main.movements') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-times me-2"></i>Limpar tudo
+      </a>
     </div>
+  </div>
+</form>
+</div>
 </div>
 
 <!-- Results -->
@@ -363,6 +351,73 @@
 
 {% block scripts %}
 <script>
+   $(function () {
+  // Função debounce — evita chamadas contínuas durante digitação
+  const debounce = (fn, wait = 600) => {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  };
+
+  const updateResults = (val) => {
+    try {
+      if (typeof val === "undefined" || val === null) val = "";
+      val = String(val).trim();
+
+      const params = new URLSearchParams(window.location.search);
+      const currentSearch = params.get("search") || "";
+
+      // Se o campo estiver vazio → limpa e recarrega só se antes havia busca
+      if (val === "" && currentSearch !== "") {
+        params.delete("search");
+        params.set("page", 1);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+        return;
+      }
+
+      // Se o campo estiver vazio e não havia busca → não faz nada
+      if (val === "") return;
+
+      // Atualiza apenas se o valor realmente mudou
+      if (val !== currentSearch) {
+        params.set("search", val);
+        params.set("page", 1);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+      }
+    } catch (err) {
+      console.error("Search update error:", err);
+    }
+  };
+
+  // Detecta input (com debounce)
+  $("#search").on(
+    "input",
+    debounce(function () {
+      const val = this.value ?? "";
+      updateResults(val);
+    }, 600)
+  );
+
+  // Pressionar Enter faz a busca imediatamente
+  $("#search").on("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      updateResults(this.value);
+    }
+  });
+});
+
+
+
+// Fecha resultados ao clicar fora
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('#search, #searchResults').length) {
+        $('#searchResults').hide();
+    }
+});
+
 $(document).ready(function() {
     if (!$('#search').val()) {
         $('#search').focus();

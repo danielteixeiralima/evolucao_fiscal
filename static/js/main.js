@@ -366,7 +366,7 @@ function measurePerformance(name, fn) {
 // Error handling
 window.addEventListener('error', function(e) {
     console.error('JavaScript error:', e.error);
-    showNotification('An unexpected error occurred. Please refresh the page.', 'error');
+    // showNotification('An unexpected error occurred. Please refresh the page.', 'error');
 });
 
 // Keyboard shortcuts

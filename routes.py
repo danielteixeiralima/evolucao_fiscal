@@ -56,18 +56,27 @@ def movements():
     query = FinancialMovement.query
     
     # Apply search filter
+    # Apply search filter
     if search:
-    # tenta converter para número se possível
-        if search.isdigit():
-            query = query.filter(FinancialMovement.number == int(search))
-        else:
-            query = query.filter(
-                or_(
-                    FinancialMovement.internal_id.ilike(f"%{search}%"),
-                    FinancialMovement.aux_customer_vendor_code.ilike(f"%{search}%"),
-                    FinancialMovement.observation.ilike(f"%{search}%")
-                )
-            )
+        s = search.strip()
+
+        # Busca textual abrangente
+        text_conds = [
+            FinancialMovement.internal_id.ilike(f"%{s}%"),
+            FinancialMovement.aux_customer_vendor_code.ilike(f"%{s}%"),
+            FinancialMovement.customer_vendor_name.ilike(f"%{s}%"),
+            FinancialMovement.customer_vendor_cnpj.ilike(f"%{s}%"),
+            FinancialMovement.observation.ilike(f"%{s}%"),
+            FinancialMovement.empresa_nome.ilike(f"%{s}%"),
+            FinancialMovement.filial_nome.ilike(f"%{s}%"),
+            FinancialMovement.movement_type_code.ilike(f"%{s}%"),  # 🔹 para "1.2.01"
+        ]
+
+        if s.isdigit():
+            text_conds.append(FinancialMovement.number == int(s))
+
+        query = query.filter(or_(*text_conds))
+
 
     
     # Apply company filter
@@ -111,6 +120,7 @@ def movements():
                          companies=companies,
                          branches=branches,
                          statuses=statuses)
+
 
 
 @main_bp.route('/movements/<int:id>')
