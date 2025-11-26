@@ -128,7 +128,46 @@ def movements():
 def movement_detail(id):
     """Show detailed view of a specific movement"""
     movement = FinancialMovement.query.get_or_404(id)
+
+    # ---------------------------
+    # ADICIONADO: ADICIONAR costCenterName DENTRO DE CADA ITEM
+    # ---------------------------
+
+    # itens do movimento
+    movement_items = movement.get_json_field("movement_items") or []
+    cost_center_apportionments = movement.get_json_field("cost_center_apportionments") or []
+
+    lookup = {
+        c.get("costCenterCode"): c.get("costCenterName")
+        for c in cost_center_apportionments
+        if c.get("costCenterCode")
+    }
+
+    for item in movement_items:
+        cost_center_obj = item.get("costCenter") or {}
+        code = cost_center_obj.get("costCenterCode")
+
+        # nome do rateio
+        name = lookup.get(code)
+
+        # 🔥 ESTA É A LINHA QUE VOCÊ QUER
+        item["costCenterItemName"] = name
+
+    # adiciona também dentro do costCenter (para o modal "Other Fields")
+    if isinstance(cost_center_obj, dict):
+        cost_center_obj["costCenterName"] = name
+        item["costCenter"] = cost_center_obj  # reatribui no item
+
+    # passa a lista enriquecida para o template
+    movement.enriched_items = movement_items
+
+    # ---------------------------
+    # FIM DO TRECHO ADICIONADO
+    # ---------------------------
+
     return render_template('movements/detail.html', movement=movement)
+
+
 
 @main_bp.route('/movements/<int:id>/delete', methods=['POST'])
 @login_required
