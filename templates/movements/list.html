@@ -1,501 +1,208 @@
 {% extends "base.html" %}
 
-{% block title %}Financial Movements - Financial Data Management{% endblock %}
+{% block title %}Movements - Financial Data Management{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>
-        <i class="fas fa-list me-3"></i>
-        Financial Movements
-    </h1>
-</div>
+<div class="container-fluid mt-4">
 
-<!-- Search and Filters -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h6 class="mb-0">
-            <i class="fas fa-filter me-2"></i>Search & Filters
-        </h6>
-    </div>
-    <div class="card-body"><form method="GET" class="row g-3">
-  <div class="col-md-6">
-    <label for="search" class="form-label fw-bold">
-      <i class="fas fa-search me-2 text-primary"></i>Buscar movimento
-    </label>
-    <input
-      type="text"
-      class="form-control"
-      id="search"
-      name="search"
-      value="{{ search }}"
-      placeholder="Digite para filtrar os movimentos..."
-    />
-    <div
-      id="searchResults"
-      class="list-group position-absolute w-100"
-      style="z-index:1000; max-height:300px; overflow:auto; display:none;"
-    ></div>
-  </div>
-
-  <div class="col-md-3">
-    <label for="start_date" class="form-label">Período inicial</label>
-    <input
-      type="date"
-      class="form-control"
-      id="start_date"
-      name="start_date"
-      value="{{ start_date }}"
-    />
-  </div>
-
-  <div class="col-md-3">
-    <label for="end_date" class="form-label">Período final</label>
-    <input
-      type="date"
-      class="form-control"
-      id="end_date"
-      name="end_date"
-      value="{{ end_date }}"
-    />
-  </div>
-
-  <div class="col-md-12 d-flex align-items-end">
-    <div class="btn-group w-100" role="group">
-      <button type="submit" class="btn btn-primary">
-        <i class="fas fa-search me-2"></i>Aplicar filtros
-      </button>
-      <a href="{{ url_for('main.movements') }}" class="btn btn-outline-secondary">
-        <i class="fas fa-times me-2"></i>Limpar tudo
-      </a>
-    </div>
-  </div>
-</form>
-</div>
-</div>
-
-<!-- Results -->
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">
-            <i class="fas fa-chart-line me-2"></i>
-            Movement Records
-            {% if movements.total %}
-            <span class="badge bg-secondary ms-2">{{ "{:,}".format(movements.total) }} total</span>
-            {% endif %}
-        </h5>
-        {% if movements.total > 0 %}
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-outline-secondary" onclick="exportData()">
-                <i class="fas fa-download me-1"></i>Export
-            </button>
-            <a href="{{ url_for('main.delete_all_movements') }}" class="btn btn-outline-danger">
-                <i class="fas fa-trash me-1"></i>Delete All
-            </a>
+    <!-- Search & Filters -->
+    <div class="card shadow-sm mb-4 bg-dark border-secondary">
+        <div class="card-header bg-dark border-secondary border-bottom-0 pt-3 ps-3">
+            <h6 class="text-light mb-0">
+                <i class="fas fa-filter me-2"></i>Search & Filters
+            </h6>
         </div>
-        {% endif %}
-    </div>
-    <div class="card-body p-0">
-        {% if movements.items %}
-        <div class="table-responsive">
-            <table class="table table-hover mb-0" id="movementsTable">
-                <thead class="table-dark">
-                    <tr>
-                        <th>N° da NF</th>
-                        <th style="display:none;">Número do Movimento (oculto)</th>
-                        <!-- <th>Empresa</th> -->
-                        <!-- <th>Filial</th> -->
-                        <th>Cliente/Fornecedor</th>
-                        <th>Valor total da nota</th>
-                        <th>Data</th>
-                        <!-- <th>Status</th> -->
-                        <th>ID interno</th>
-                        <th>Ações</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for movement in movements.items %}
-                    <tr>
-                        <td>{{ movement.number or '-' }}</td>
-                        <td style="display:none;">{{ movement.movement_type_code or '' }}</td>
-                        <!-- <td>
-                            {% if movement.empresa_nome %}
-                                {{ movement.empresa_nome }}
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td>
+        <div class="card-body pt-2">
+            <form method="get">
+                <div class="row g-3">
+                    <!-- Search Input -->
+                    <div class="col-md-6">
+                        <label for="search" class="form-label text-light small fw-bold mb-1">
+                            <i class="fas fa-search me-1 text-primary"></i>Buscar movimento
+                        </label>
+                        <input type="text" class="form-control bg-dark border-secondary text-light" id="search"
+                            name="search" value="{{ search }}" placeholder="Digite para filtrar os movimentos...">
+                    </div>
 
-                        <td>
-                            {% if movement.filial_code %}
-                                {{ movement.filial_code }}
-                            {% elif movement.branch_id %}
-                                {{ movement.branch_id }}
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td> -->
+                    <!-- Date Range -->
+                    <div class="col-md-3">
+                        <label for="start_date" class="form-label text-light small fw-bold mb-1">Período inicial</label>
+                        <input type="date" class="form-control bg-dark border-secondary text-light" id="start_date"
+                            name="start_date" value="{{ start_date }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="end_date" class="form-label text-light small fw-bold mb-1">Período final</label>
+                        <input type="date" class="form-control bg-dark border-secondary text-light" id="end_date"
+                            name="end_date" value="{{ end_date }}">
+                    </div>
+                </div>
 
-
-                        <td>
-                            {% if movement.aux_customer_vendor_code and movement.customer_vendor_name and movement.customer_vendor_cnpj %}
-                                {{ movement.aux_customer_vendor_code }} - {{ movement.customer_vendor_name }} - {{ movement.customer_vendor_cnpj }}
-                            {% elif movement.aux_customer_vendor_code and movement.customer_vendor_name %}
-                                {{ movement.aux_customer_vendor_code }} - {{ movement.customer_vendor_name }}
-                            {% elif movement.aux_customer_vendor_code %}
-                                {{ movement.aux_customer_vendor_code }}
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            {% if movement.gross_value is not none %}
-                                <span class="badge bg-success">
-                                    {{ movement.net_value_currency_code or 'R$' }} {{ "%.2f"|format(movement.gross_value) }}
-                                </span>
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if movement.date %}
-                                <small class="text-muted">
-                                    {{ movement.date.strftime('%d/%m/%Y') }}
-                                </small>
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td>
-                        <!-- <td>
-                            {% if movement.status %}
-                                <span class="badge {% if movement.status == 'F' %}bg-success{% elif movement.status == 'N' %}bg-warning{% else %}bg-secondary{% endif %}">
-                                    {{ movement.status }}
-                                </span>
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td> -->
-                        
-                        <td>
-                            <code class="text-primary">{{ movement.internal_id or '-' }}</code>
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ url_for('main.movement_detail', id=movement.id) }}" 
-                                   class="btn btn-outline-primary" title="Ver detalhes">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button type="button" class="btn btn-outline-danger" 
-                                        onclick="confirmDelete({{ movement.id }}, '{{ movement.internal_id or movement.id }}')"
-                                        title="Excluir movimento">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <!-- Action Buttons -->
+                <div class="row mt-3">
+                    <div class="col-md-9">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>Aplicar filtros
+                        </button>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center justify-content-center">
+                        <a href="{{ url_for('main.movements') }}" class="text-decoration-none text-secondary">
+                            <i class="fas fa-times me-1"></i>Limpar tudo
+                        </a>
+                    </div>
+                </div>
+            </form>
         </div>
-        
-        <!-- Pagination -->
-        {% if movements.pages > 1 %}
-        <div class="card-footer">
-            <nav aria-label="Movements pagination">
-                <ul class="pagination justify-content-center mb-0">
+    </div>
+
+    <!-- Main Table Card -->
+    <div class="card bg-dark border-secondary shadow">
+        <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center py-3">
+            <div>
+                <h5 class="mb-0 text-light">
+                    <i class="fas fa-chart-line me-2"></i>Movement Records
+                    <span class="badge bg-secondary ms-2">{{ movements.total }} total</span>
+                </h5>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-download me-1"></i> Export
+                </button>
+                <a href="{{ url_for('main.delete_all_movements') }}" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash me-1"></i> Delete All
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0 align-middle">
+                    <thead>
+                        <tr class="text-secondary border-secondary">
+                            <th class="ps-4">Nº da NF</th>
+                            <th>Cliente/Fornecedor</th>
+                            <th>Valor total da nota</th>
+                            <th>Data</th>
+                            <th>ID interno</th>
+                            <th class="text-end pe-4">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movement in movements.items %}
+                        <tr class="border-secondary">
+                            <td class="ps-4 text-light">{{ movement.number or '-' }}</td>
+                            <td>
+                                <div class="text-light">
+                                    {% if movement.customer_vendor %}
+                                    {{ movement.customer_vendor.name }}
+                                    {% if movement.customer_vendor.cnpj %}
+                                    <span class="text-muted small"> - {{ movement.customer_vendor.cnpj }}</span>
+                                    {% endif %}
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-success px-3 py-2" style="font-size: 0.9em; font-weight: 500;">
+                                    R$ {{ "%.2f"|format(movement.net_value or 0) }}
+                                </span>
+                            </td>
+                            <td class="text-light">
+                                {% if movement.date %}
+                                {{ movement.date.strftime('%d/%m/%Y') }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="text-primary">
+                                    {{ movement.company.code if movement.company else '?' }} | {{ movement.internal_id
+                                    }}
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <a href="{{ url_for('main.movement_detail', id=movement.id) }}"
+                                        class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ movement.id }}" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal{{ movement.id }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-dark border-secondary">
+                                            <div class="modal-header border-secondary">
+                                                <h5 class="modal-title text-light">Confirm Delete</h5>
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-light text-start">
+                                                Are you sure you want to delete movement <strong>{{ movement.internal_id
+                                                    }}</strong>?
+                                            </div>
+                                            <div class="modal-footer border-secondary">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ url_for('main.delete_movement', id=movement.id) }}"
+                                                    method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-5">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <p>No movements found</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-dark border-secondary py-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0 pagination-sm">
                     {% if movements.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('main.movements', page=movements.prev_num, search=search) }}">
-                            <i class="fas fa-chevron-left"></i> Previous
-                        </a>
+                        <a class="page-link bg-dark border-secondary text-light"
+                            href="{{ url_for('main.movements', page=movements.prev_num, search=search, start_date=start_date, end_date=end_date) }}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link bg-dark border-secondary text-muted">Previous</span>
                     </li>
                     {% endif %}
-                    
-                    {% for page_num in movements.iter_pages() %}
-                        {% if page_num %}
-                            {% if page_num != movements.page %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ url_for('main.movements', page=page_num, search=search) }}">{{ page_num }}</a>
-                            </li>
-                            {% else %}
-                            <li class="page-item active">
-                                <span class="page-link">{{ page_num }}</span>
-                            </li>
-                            {% endif %}
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">...</span>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                    
+
+                    <li class="page-item active">
+                        <span class="page-link bg-primary border-primary text-light">
+                            {{ movements.page }}
+                        </span>
+                    </li>
+
                     {% if movements.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('main.movements', page=movements.next_num, search=search) }}">
-                            Next <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <a class="page-link bg-dark border-secondary text-light"
+                            href="{{ url_for('main.movements', page=movements.next_num, search=search, start_date=start_date, end_date=end_date) }}">Next</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link bg-dark border-secondary text-muted">Next</span>
                     </li>
                     {% endif %}
                 </ul>
             </nav>
-            
-            <!-- Pagination Info -->
-            <div class="text-center mt-2">
-                <small class="text-muted">
-                    Showing {{ movements.per_page * (movements.page - 1) + 1 }} to 
-                    {{ movements.per_page * movements.page if movements.page < movements.pages else movements.total }} 
-                    of {{ "{:,}".format(movements.total) }} entries
-                </small>
-            </div>
-        </div>
-        {% endif %}
-        
-        {% else %}
-        <div class="text-center py-5">
-            {% if search %}
-            <i class="fas fa-search fa-3x text-muted mb-3"></i>
-            <h5 class="text-muted">No results found</h5>
-            <p class="text-muted">No movements match your search criteria: "{{ search }}"</p>
-            <a href="{{ url_for('main.movements') }}" class="btn btn-outline-primary">
-                <i class="fas fa-times me-2"></i>Clear Search
-            </a>
-            {% else %}
-            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-            <h5 class="text-muted">No movements found</h5>
-            <p class="text-muted">No financial movement records have been uploaded yet.</p>
-            {% if current_user.is_admin %}
-            <a href="{{ url_for('admin.upload_file') }}" class="btn btn-primary">
-                <i class="fas fa-upload me-2"></i>Upload Data
-            </a>
-            {% endif %}
-            {% endif %}
-        </div>
-        {% endif %}
-    </div>
-</div>
-
-<!-- Quick Stats -->
-{% if movements.items %}
-<div class="row mt-4">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-primary">Total Value</h5>
-                <p class="card-text">
-                    <span class="h4">
-                        {% set total_value = movements.items | map(attribute='net_value') | select('number') | sum %}
-                        R$ {{ "%.2f"|format(total_value or 0) }}
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-success">Completed</h5>
-                <p class="card-text">
-                    <span class="h4">
-                        {% set completed = movements.items | selectattr('status', 'equalto', 'F') | list | length %}
-                        {{ completed }}
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-warning">Pending</h5>
-                <p class="card-text">
-                    <span class="h4">
-                        {% set pending = movements.items | selectattr('status', 'equalto', 'N') | list | length %}
-                        {{ pending }}
-                    </span>
-                </p>
-            </div>
         </div>
     </div>
 </div>
-{% endif %}
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
-                    Confirm Delete
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete movement <strong id="movementName"></strong>?</p>
-                <p class="text-muted">This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" method="POST" style="display: inline;">
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash me-2"></i>Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% endblock %}
-
-{% block scripts %}
-<script>
-   $(function () {
-  // Função debounce — evita chamadas contínuas durante digitação
-  const debounce = (fn, wait = 600) => {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, args), wait);
-    };
-  };
-
-  const updateResults = (val) => {
-    try {
-      if (typeof val === "undefined" || val === null) val = "";
-      val = String(val).trim();
-
-      const params = new URLSearchParams(window.location.search);
-      const currentSearch = params.get("search") || "";
-
-      // Se o campo estiver vazio → limpa e recarrega só se antes havia busca
-      if (val === "" && currentSearch !== "") {
-        params.delete("search");
-        params.set("page", 1);
-        window.location.href = `${window.location.pathname}?${params.toString()}`;
-        return;
-      }
-
-      // Se o campo estiver vazio e não havia busca → não faz nada
-      if (val === "") return;
-
-      // Atualiza apenas se o valor realmente mudou
-      if (val !== currentSearch) {
-        params.set("search", val);
-        params.set("page", 1);
-        window.location.href = `${window.location.pathname}?${params.toString()}`;
-      }
-    } catch (err) {
-      console.error("Search update error:", err);
-    }
-  };
-
-  // Detecta input (com debounce)
-  $("#search").on(
-    "input",
-    debounce(function () {
-      const val = this.value ?? "";
-      updateResults(val);
-    }, 600)
-  );
-
-  // Pressionar Enter faz a busca imediatamente
-  $("#search").on("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      updateResults(this.value);
-    }
-  });
-});
-
-
-
-// Fecha resultados ao clicar fora
-$(document).on('click', function(e) {
-    if (!$(e.target).closest('#search, #searchResults').length) {
-        $('#searchResults').hide();
-    }
-});
-
-$(document).ready(function() {
-    if (!$('#search').val()) {
-        $('#search').focus();
-    }
-    
-    $('#search').keypress(function(e) {
-        if (e.which == 13) {
-            $(this).closest('form').submit();
-        }
-    });
-
-    if ($('#movementsTable').length) {
-        if (!$.fn.DataTable.isDataTable('#movementsTable')) {
-            $('#movementsTable').DataTable({
-                responsive: true,
-                pageLength: 25,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                language: {
-                    search: "Buscar movimentos:",
-                    lengthMenu: "Mostrar _MENU_ registros por página",
-                    info: "Exibindo _START_ a _END_ de _TOTAL_ registros",
-                    infoEmpty: "Nenhum registro disponível",
-                    infoFiltered: "(filtrado de _MAX_ registros no total)",
-                    paginate: {
-                        first: "Primeiro",
-                        last: "Último",
-                        next: "Próximo",
-                        previous: "Anterior"
-                    }
-                },
-                order: [],
-                columnDefs: [
-                    { targets: [-1], orderable: false },
-                    { targets: [4], type: 'currency' },
-                    { targets: [1], visible: false, searchable: true }
-                ],
-                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
-                    '<"row"<"col-sm-12"tr>>' +
-                    '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                initComplete: function() {
-                    $('.dataTables_length select').addClass('form-select form-select-sm');
-                    $('.dataTables_filter input').addClass('form-control form-control-sm');
-                }
-            });
-        }
-    }
-
-});
-
-function confirmDelete(movementId, movementName) {
-    document.getElementById('movementName').textContent = movementName;
-    document.getElementById('deleteForm').action = `/movements/${movementId}/delete`;
-    new bootstrap.Modal(document.getElementById('deleteModal')).show();
-}
-
-function exportData() {
-    let table = document.getElementById('movementsTable');
-    let csv = [];
-    let rows = table.querySelectorAll('tr');
-    
-    for (let i = 0; i < rows.length; i++) {
-        let row = [], cols = rows[i].querySelectorAll('td, th');
-        
-        for (let j = 0; j < cols.length - 1; j++) {
-            row.push(cols[j].innerText);
-        }
-        
-        csv.push(row.join(','));
-    }
-    
-    let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-    let downloadLink = document.createElement('a');
-    downloadLink.download = 'financial_movements.csv';
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-    downloadLink.style.display = 'none';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-}
-</script>
 {% endblock %}

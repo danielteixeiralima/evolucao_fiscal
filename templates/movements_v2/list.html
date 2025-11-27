@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Movimentos V2 - Sistema Normalizado{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3">
+                        <i class="fas fa-database text-primary"></i>
+                        Movimentos V2
+                        <span class="badge bg-success">Sistema Normalizado</span>
+                    </h1>
+                    <p class="text-muted">Dados importados diretamente da API TOTVS com estrutura normalizada</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('movements_v2.stats') }}" class="btn btn-info">
+                        <i class="fas fa-chart-bar"></i> Estatísticas
+                    </a>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Sistema Atual
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-list"></i>
+                Lista de Movimentos
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Documento</th>
+                            <th>Empresa</th>
+                            <th>Filial</th>
+                            <th>Cliente/Fornecedor</th>
+                            <th class="text-end">Valor Bruto</th>
+                            <th class="text-end">Valor Líquido</th>
+                            <th>Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movement in movements %}
+                        <tr>
+                            <td><code>{{ movement.id }}</code></td>
+                            <td>
+                                {% if movement.date %}
+                                {{ movement.date.strftime('%d/%m/%Y') }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong>{{ movement.number or '-' }}</strong>
+                                {% if movement.series %}
+                                <small class="text-muted">/ {{ movement.series }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ movement.company.code }}</span>
+                                <small class="text-muted">{{ movement.company.name }}</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ movement.branch.code }}</span>
+                                <small class="text-muted">{{ movement.branch.name }}</small>
+                            </td>
+                            <td>
+                                {% if movement.customer_vendor %}
+                                {{ movement.customer_vendor.name or movement.customer_vendor.code }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <strong class="text-primary">R$ {{ "%.2f"|format(movement.gross_value or 0) }}</strong>
+                            </td>
+                            <td class="text-end">
+                                <strong class="text-success">R$ {{ "%.2f"|format(movement.net_value or 0) }}</strong>
+                            </td>
+                            <td>
+                                {% if movement.status %}
+                                <span class="badge bg-success">{{ movement.status }}</span>
+                                {% else %}
+                                <span class="badge bg-secondary">-</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('movements_v2.detail', movement_id=movement.id) }}"
+                                    class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <p>Nenhum movimento encontrado</p>
+                                <small>Execute o importador para adicionar dados</small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <small>
+                <i class="fas fa-info-circle"></i>
+                Mostrando até 100 movimentos mais recentes
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}

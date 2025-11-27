@@ -2,6 +2,7 @@ from app import db
 from flask_login import UserMixin
 from datetime import datetime
 import json
+from sqlalchemy.orm import relationship
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,162 +14,6 @@ class User(UserMixin, db.Model):
     
     def __repr__(self):
         return f'<User {self.username}>'
-
-class FinancialMovement(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    
-    # Core identification fields - all 117 fields from Excel (added 4 new company/branch info fields)
-    internal_id = db.Column(db.String(50), nullable=True)
-    company_id = db.Column(db.Integer, nullable=True)
-    movement_id = db.Column(db.Integer, nullable=True)
-    branch_id = db.Column(db.Integer, nullable=True)
-    
-    # Company and Branch information (new fields)
-    empresa_code = db.Column(db.String(50), nullable=True)
-    empresa_nome = db.Column(db.String(255), nullable=True)
-    filial_code = db.Column(db.String(50), nullable=True)
-    filial_nome = db.Column(db.String(255), nullable=True)
-    warehouse_code = db.Column(db.String(50), nullable=True)
-    destiny_warehouse_code = db.Column(db.String(50), nullable=True)
-    number = db.Column(db.Integer, nullable=True)
-    series = db.Column(db.String(10), nullable=True)
-    movement_type_code = db.Column(db.String(50), nullable=True)
-    type = db.Column(db.String(10), nullable=True)
-    status = db.Column(db.String(10), nullable=True)
-    printed = db.Column(db.Boolean, nullable=True)
-    document_printed = db.Column(db.Boolean, nullable=True)
-    bill_printed = db.Column(db.Boolean, nullable=True)
-    register_date = db.Column(db.DateTime, nullable=True)
-    exit_date = db.Column(db.DateTime, nullable=True)
-    commercial_representative_charge = db.Column(db.Float, nullable=True)
-    gross_value = db.Column(db.Float, nullable=True)
-    net_value = db.Column(db.Float, nullable=True)
-    informed_net_value = db.Column(db.Float, nullable=True)
-    other_values = db.Column(db.Float, nullable=True)
-    discount_percentage = db.Column(db.Float, nullable=True)
-    expense_percentage = db.Column(db.Float, nullable=True)
-    expense_value = db.Column(db.Float, nullable=True)
-    extra_percentage1 = db.Column(db.Float, nullable=True)
-    extra_value1 = db.Column(db.Float, nullable=True)
-    extra_percentage2 = db.Column(db.Float, nullable=True)
-    extra_value2 = db.Column(db.Float, nullable=True)
-    transported_product_net_weight = db.Column(db.Float, nullable=True)
-    transported_product_gross_weight = db.Column(db.Float, nullable=True)
-    classification_table5_code = db.Column(db.String(50), nullable=True)
-    financial_optional_table2_code = db.Column(db.String(50), nullable=True)
-    net_value_currency_code = db.Column(db.String(10), nullable=True)
-    date = db.Column(db.DateTime, nullable=True)
-    has_generated_bill = db.Column(db.Boolean, nullable=True)
-    aux_customer_vendor_code = db.Column(db.String(50), nullable=True)
-    customer_vendor_name = db.Column(db.String(255), nullable=True)
-    customer_vendor_cnpj = db.Column(db.String(30), nullable=True)
-    aux_customer_vendor_company_id = db.Column(db.Integer, nullable=True)
-    cost_center_code = db.Column(db.String(50), nullable=True)
-    salesman1_code = db.Column(db.String(50), nullable=True)
-    charge_percentage = db.Column(db.Float, nullable=True)
-    salesman2_charge_percentage = db.Column(db.Float, nullable=True)
-    salesman3_charge_percentage = db.Column(db.Float, nullable=True)
-    salesman4_charge_percentage = db.Column(db.Float, nullable=True)
-    user_code = db.Column(db.String(50), nullable=True)
-    destiny_branch_id = db.Column(db.Integer, nullable=True)
-    lot_generated = db.Column(db.Boolean, nullable=True)
-    accounting_export_status = db.Column(db.String(50), nullable=True)
-    delivery_date = db.Column(db.DateTime, nullable=True)
-    has_generated_work_account = db.Column(db.Boolean, nullable=True)
-    work_account_generated = db.Column(db.String(50), nullable=True)
-    last_edit_time = db.Column(db.DateTime, nullable=True)
-    indicate_object_use = db.Column(db.String(50), nullable=True)
-    bonum_integrated = db.Column(db.Boolean, nullable=True)
-    processed_flag = db.Column(db.Boolean, nullable=True)
-    icms_deduction_value = db.Column(db.Float, nullable=True)
-    creation_user = db.Column(db.String(50), nullable=True)
-    creation_date = db.Column(db.DateTime, nullable=True)
-    email_status = db.Column(db.String(50), nullable=True)
-    internal_gross_value = db.Column(db.Float, nullable=True)
-    other_company_inss_base_value = db.Column(db.Float, nullable=True)
-    conditional_discount_value = db.Column(db.Float, nullable=True)
-    conditional_expense_value = db.Column(db.Float, nullable=True)
-    affect_stock_order = db.Column(db.String(50), nullable=True)
-    commercial_automation_exported = db.Column(db.Integer, nullable=True)
-    aplication_integration = db.Column(db.String(10), nullable=True)
-    entry_date = db.Column(db.DateTime, nullable=True)
-    extemporaneous = db.Column(db.Integer, nullable=True)
-    merchandise_value = db.Column(db.Float, nullable=True)
-    uses_financial_value_apportionment = db.Column(db.Boolean, nullable=True)
-    conclusion_flag = db.Column(db.Integer, nullable=True)
-    paradigma_status = db.Column(db.String(10), nullable=True)
-    paradigma_auto_integrated = db.Column(db.Boolean, nullable=True)
-    original_gross_value = db.Column(db.Float, nullable=True)
-    original_net_value = db.Column(db.Float, nullable=True)
-    original_other_values = db.Column(db.Float, nullable=True)
-    operation_id = db.Column(db.Integer, nullable=True)
-    scp_branch_id = db.Column(db.Integer, nullable=True)
-    
-    # JSON fields - properly formatted as Text columns
-    movement_items = db.Column(db.Text, nullable=True)
-    payments = db.Column(db.Text, nullable=True)
-    cost_center_apportionments = db.Column(db.Text, nullable=True)
-    department_apportionments = db.Column(db.Text, nullable=True)
-    taxes = db.Column(db.Text, nullable=True)
-    fiscal = db.Column(db.Text, nullable=True)
-    norm = db.Column(db.Text, nullable=True)
-    cargo_component = db.Column(db.Text, nullable=True)
-    third_party_nf = db.Column(db.Text, nullable=True)
-    safety_device = db.Column(db.Text, nullable=True)
-    nfe = db.Column(db.Text, nullable=True)
-    input_ctrc = db.Column(db.Text, nullable=True)
-    output_ctrc = db.Column(db.Text, nullable=True)
-    ctrc = db.Column(db.Text, nullable=True)
-    transport_data = db.Column(db.Text, nullable=True)
-    document_authorization = db.Column(db.Text, nullable=True)
-    judicial_process = db.Column(db.Text, nullable=True)
-    service_order = db.Column(db.Text, nullable=True)
-    related_movement = db.Column(db.Text, nullable=True)
-    export_related_movement = db.Column(db.Text, nullable=True)
-    linked_movement = db.Column(db.Text, nullable=True)
-    c_te = db.Column(db.Text, nullable=True)
-    eai_integration = db.Column(db.Text, nullable=True)
-    electronic_invoice_free_fields = db.Column(db.Text, nullable=True)
-    
-    # Remaining fields
-    customer_vendor_code = db.Column(db.String(50), nullable=True)
-    payment_term_code = db.Column(db.String(50), nullable=True)
-    observation = db.Column(db.Text, nullable=True)
-    financial_optional_table1_code = db.Column(db.String(50), nullable=True)
-    financial_entry_movement_id = db.Column(db.String(50), nullable=True)
-    generated_entry_number = db.Column(db.String(50), nullable=True)
-    open_entry_number = db.Column(db.String(50), nullable=True)
-    cash_account_code = db.Column(db.String(50), nullable=True)
-    customer_vendor_company_id = db.Column(db.Integer, nullable=True)
-    fluxus_grouped_flag = db.Column(db.Boolean, nullable=True)
-    cash_account_company_id = db.Column(db.Integer, nullable=True)
-    long_history = db.Column(db.Text, nullable=True)
-    
-    # Upload tracking
-    upload_batch_id = db.Column(db.String(36))
-    uploaded_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    def get_json_field(self, field_name):
-        """Get a JSON field as a Python object"""
-        field_value = getattr(self, field_name, None)
-        if field_value:
-            try:
-                return json.loads(field_value) if isinstance(field_value, str) else field_value
-            except (json.JSONDecodeError, TypeError):
-                return []
-        return []
-
-    def set_json_field(self, field_name, value):
-        """Set a JSON field from a Python object"""
-        if value:
-            json_value = json.dumps(value) if not isinstance(value, str) else value
-            setattr(self, field_name, json_value)
-        else:
-            setattr(self, field_name, None)
-    
-    def __repr__(self):
-        return f'<FinancialMovement {self.internal_id}>'
 
 class UploadHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -187,3 +32,183 @@ class UploadHistory(db.Model):
     
     def __repr__(self):
         return f'<UploadHistory {self.filename}>'
+
+# -----------------------------------------------------------------------------
+# V2 MODELS (Normalized) - Adapted for Flask-SQLAlchemy
+# -----------------------------------------------------------------------------
+
+class Company(db.Model):
+    """Empresa"""
+    __tablename__ = 'company'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(50), unique=True, nullable=False, index=True)
+    name = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    branches = db.relationship('Branch', back_populates='company')
+    cost_centers = db.relationship('CostCenter', back_populates='company')
+    movements = db.relationship('FinancialMovement', back_populates='company')
+    
+    def __repr__(self):
+        return f'<Company {self.code} - {self.name}>'
+
+
+class Branch(db.Model):
+    """Filial"""
+    __tablename__ = 'branch'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    code = db.Column(db.String(50), nullable=False, index=True)
+    name = db.Column(db.String(255))
+    
+    __table_args__ = (
+        db.UniqueConstraint('company_id', 'code', name='uq_branch_company_code'),
+    )
+    
+    company = db.relationship('Company', back_populates='branches')
+    movements = db.relationship('FinancialMovement', back_populates='branch')
+
+
+class CostCenter(db.Model):
+    """Centro de Custo"""
+    __tablename__ = 'cost_center'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    code = db.Column(db.String(50), nullable=False, index=True)
+    name = db.Column(db.String(255), nullable=False)
+    
+    __table_args__ = (
+        db.UniqueConstraint('company_id', 'code', name='uq_cc_company_code'),
+    )
+    
+    company = db.relationship('Company', back_populates='cost_centers')
+    apportionments = db.relationship('CostCenterApportionment', back_populates='cost_center')
+    items = db.relationship('MovementItem', back_populates='cost_center')
+
+
+class Product(db.Model):
+    """Produto"""
+    __tablename__ = 'product'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    code = db.Column(db.String(50), nullable=False, index=True)
+    name = db.Column(db.String(255))
+    fantasy_name = db.Column(db.String(255))
+    measure_unit = db.Column(db.String(20))
+    
+    __table_args__ = (
+        db.UniqueConstraint('company_id', 'code', name='uq_product_company_code'),
+    )
+    
+    items = db.relationship('MovementItem', back_populates='product')
+
+
+class CustomerVendor(db.Model):
+    """Cliente/Fornecedor"""
+    __tablename__ = 'customer_vendor'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    code = db.Column(db.String(50), nullable=False, index=True)
+    name = db.Column(db.String(255))
+    cnpj = db.Column(db.String(30))
+    
+    __table_args__ = (
+        db.UniqueConstraint('company_id', 'code', name='uq_cv_company_code'),
+    )
+    
+    movements = db.relationship('FinancialMovement', back_populates='customer_vendor')
+
+
+class FinancialMovement(db.Model):
+    """Movimento Financeiro"""
+    __tablename__ = 'financial_movement'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    internal_id = db.Column(db.String(50), unique=True, nullable=False, index=True)
+    movement_id = db.Column(db.Integer)
+    
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=False, index=True)
+    customer_vendor_id = db.Column(db.Integer, db.ForeignKey('customer_vendor.id'))
+    
+    number = db.Column(db.Integer)
+    series = db.Column(db.String(10))
+    movement_type_code = db.Column(db.String(50))
+    type = db.Column(db.String(10))
+    status = db.Column(db.String(10))
+    date = db.Column(db.DateTime)
+    
+    gross_value = db.Column(db.Float, default=0.0)
+    net_value = db.Column(db.Float, default=0.0)
+    
+    warehouse_code = db.Column(db.String(50))
+    observation = db.Column(db.Text)
+    
+    # Upload tracking
+    upload_batch_id = db.Column(db.String(36))
+    uploaded_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    company = db.relationship('Company', back_populates='movements')
+    branch = db.relationship('Branch', back_populates='movements')
+    customer_vendor = db.relationship('CustomerVendor', back_populates='movements')
+    items = db.relationship('MovementItem', back_populates='movement', cascade='all, delete-orphan')
+    cost_center_apportionments = db.relationship('CostCenterApportionment', back_populates='movement', cascade='all, delete-orphan')
+    
+    def get_json_field(self, field_name):
+        """Helper for compatibility with old templates, though logic should move to Adapter"""
+        return None 
+
+
+class MovementItem(db.Model):
+    """Item do Movimento"""
+    __tablename__ = 'movement_item'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    movement_id = db.Column(db.Integer, db.ForeignKey('financial_movement.id'), nullable=False, index=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    cost_center_id = db.Column(db.Integer, db.ForeignKey('cost_center.id'))
+    
+    sequential_number = db.Column(db.Integer)
+    quantity = db.Column(db.Float, default=0.0)
+    unit_price = db.Column(db.Float, default=0.0)
+    total_value = db.Column(db.Float, default=0.0)
+    
+    # Campo para armazenar o JSON original completo do item (para fidelidade visual)
+    original_data = db.Column(db.Text)
+    
+    movement = db.relationship('FinancialMovement', back_populates='items')
+    product = db.relationship('Product', back_populates='items')
+    cost_center = db.relationship('CostCenter', back_populates='items')
+
+
+class CostCenterApportionment(db.Model):
+    """Rateio de Centro de Custo"""
+    __tablename__ = 'cost_center_apportionment'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    movement_id = db.Column(db.Integer, db.ForeignKey('financial_movement.id'), nullable=False, index=True)
+    cost_center_id = db.Column(db.Integer, db.ForeignKey('cost_center.id'), nullable=False, index=True)
+    value = db.Column(db.Float, default=0.0)
+    
+    movement = db.relationship('FinancialMovement', back_populates='cost_center_apportionments')
+    cost_center = db.relationship('CostCenter', back_populates='apportionments')
+
+
+class BudgetaryNature(db.Model):
+    """Natureza Orçamentária"""
+    __tablename__ = 'budgetary_nature'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False, index=True)
+    code = db.Column(db.String(50), nullable=False, index=True)
+    description = db.Column(db.String(255))
+    
+    __table_args__ = (
+        db.UniqueConstraint('company_id', 'code', name='uq_bn_company_code'),
+    )

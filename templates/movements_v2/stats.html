@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Estatísticas V2{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3">
+                        <i class="fas fa-chart-bar text-primary"></i>
+                        Estatísticas do Sistema V2
+                    </h1>
+                    <p class="text-muted">Dados do banco normalizado</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('movements_v2.list_movements') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Empresas -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-building fa-3x text-secondary mb-3"></i>
+                    <h2 class="display-4">{{ stats.companies }}</h2>
+                    <p class="text-muted mb-0">Empresas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filiais -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-store fa-3x text-info mb-3"></i>
+                    <h2 class="display-4">{{ stats.branches }}</h2>
+                    <p class="text-muted mb-0">Filiais</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centros de Custo -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-chart-pie fa-3x text-warning mb-3"></i>
+                    <h2 class="display-4">{{ stats.cost_centers }}</h2>
+                    <p class="text-muted mb-0">Centros de Custo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produtos -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-box fa-3x text-success mb-3"></i>
+                    <h2 class="display-4">{{ stats.products }}</h2>
+                    <p class="text-muted mb-0">Produtos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clientes/Fornecedores -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-user-tie fa-3x text-primary mb-3"></i>
+                    <h2 class="display-4">{{ stats.customer_vendors }}</h2>
+                    <p class="text-muted mb-0">Clientes/Fornecedores</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movimentos -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <i class="fas fa-file-invoice fa-3x text-primary mb-3"></i>
+                    <h2 class="display-4 text-primary">{{ stats.movements }}</h2>
+                    <p class="text-muted mb-0"><strong>Movimentos</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Itens -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-list fa-3x text-success mb-3"></i>
+                    <h2 class="display-4">{{ stats.items }}</h2>
+                    <p class="text-muted mb-0">Itens</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rateios -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-percentage fa-3x text-info mb-3"></i>
+                    <h2 class="display-4">{{ stats.apportionments }}</h2>
+                    <p class="text-muted mb-0">Rateios CC</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informações Adicionais -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5><i class="fas fa-info-circle"></i> Sobre o Sistema V2</h5>
+                <p class="mb-2">O Sistema V2 utiliza uma estrutura de banco de dados <strong>normalizada</strong>, onde:
+                </p>
+                <ul class="mb-0">
+                    <li>Cada entidade (Empresa, Filial, Centro de Custo, etc.) tem sua própria tabela</li>
+                    <li>Relacionamentos são feitos através de chaves estrangeiras (Foreign Keys)</li>
+                    <li>Não há campos JSON - todos os dados são estruturados</li>
+                    <li>Queries são mais eficientes e o código é mais limpo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Como Importar Mais Dados -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-download"></i> Como Importar Mais Dados</h5>
+                </div>
+                <div class="card-body">
+                    <p>Execute o comando abaixo no terminal para importar mais movimentos:</p>
+                    <div class="bg-dark text-light p-3 rounded">
+                        <code>python import_v2.py --inicio 2025-08-01 --fim 2025-11-01 --empresa 4 --filial 17</code>
+                    </div>
+                    <p class="mt-3 mb-0">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            Ajuste as datas, empresa e filial conforme necessário
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
