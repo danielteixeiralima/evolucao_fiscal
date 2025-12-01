@@ -71,7 +71,18 @@ def create_app():
     # CONFIGURAÇÕES GERAIS
     # -----------------------------
     app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///financial_data.db")
+    
+    # Garante que o diretório instance existe
+    instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
+    os.makedirs(instance_path, exist_ok=True)
+    
+    # Configura o banco de dados com caminho absoluto
+    default_db_path = os.path.join(instance_path, 'financial_data.db')
+    db_uri = os.environ.get("DATABASE_URL", f"sqlite:///{default_db_path}")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+    
+    logging.info(f"📊 Database URI: {db_uri}")
+    
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_recycle": 300,

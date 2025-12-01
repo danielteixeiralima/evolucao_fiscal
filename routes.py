@@ -218,21 +218,31 @@ class MovementAdapter:
                         # Fix: Budgetary Nature - Fetch from API
                         bn_code = item_dict.get('bugdetNatureCode') or item_dict.get('budgetNatureCode')
                         if bn_code:
+                            logger.debug(f"Fetching budgetary nature for code: {bn_code}")
                             # Try API first
                             bn_description = fetch_budgetary_nature_description(bn_code)
                             if bn_description:
+                                logger.debug(f"API returned description: {bn_description}")
+                                # Update both possible field names
                                 item_dict['bugdetNatureCode'] = bn_description
+                                item_dict['budgetNatureCode'] = bn_description
                             else:
+                                logger.warning(f"API failed for code {bn_code}, trying database")
                                 # Fallback to database
                                 bn = BudgetaryNature.query.filter_by(
                                     company_id=self._mov.company_id,
                                     code=bn_code
                                 ).first()
                                 if bn and bn.description:
+                                    logger.debug(f"Database returned description: {bn.description}")
                                     item_dict['bugdetNatureCode'] = bn.description
+                                    item_dict['budgetNatureCode'] = bn.description
+                                else:
+                                    logger.warning(f"No description found for budgetary nature code: {bn_code}")
 
                         items.append(item_dict)
-                    except:
+                    except Exception as e:
+                        logger.error(f"Error processing movement item: {str(e)}")
                         items.append(self._fallback_item(item))
                 else:
                     items.append(self._fallback_item(item))
